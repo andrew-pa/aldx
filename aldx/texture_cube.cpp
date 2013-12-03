@@ -1,7 +1,7 @@
 
 #include "texture_cube.h"
 
-TextureCube::TextureCube(ComPtr<ID3D11Device> device,
+texture_cube::texture_cube(ComPtr<ID3D11Device> device,
 						 CD3D11_TEXTURE2D_DESC desc)
 {
 	desc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;

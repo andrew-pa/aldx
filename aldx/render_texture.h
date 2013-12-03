@@ -4,7 +4,7 @@
 //render_texture
 // Texture that can be bound to the OM stage of the pipeline, so you can render to it
 class render_texture :
-	public Texture2D
+	public texture2d
 {
 protected:
 	ComPtr<ID3D11DepthStencilView> dsv;
@@ -21,8 +21,8 @@ public:
 	propr(ComPtr<ID3D11RenderTargetView>, renderTargetView, { return rtv; })
 };
 
-//DepthRenderTexture
-// RenderTexture that only renders depth, useful for shadow mapping, etc.
+//depth_render_texture
+// render_texture that only renders depth, useful for shadow mapping, etc.
 class depth_render_texture : public texture2d
 {
 protected:

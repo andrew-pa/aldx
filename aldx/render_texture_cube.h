@@ -3,7 +3,7 @@
 #include "texture_cube.h"
 
 //render_texture_cube
-// TextureCube where you can render to each of the faces
+// texture_cube where you can render to each of the faces
 class render_texture_cube :
 	public texture_cube
 {

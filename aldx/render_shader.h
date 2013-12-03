@@ -57,8 +57,8 @@ public:
 	virtual void world(const float4x4& m) = 0;
 	virtual void view(const float4x4& m) = 0;
 	virtual void proj(const float4x4& m) = 0;
-	virtual void setTexture(Texture2D* tex) = 0;
-	virtual void setMaterial(const material& mat) = 0;
+	virtual void set_texture(texture2d* tex) = 0;
+	virtual void set_material(const material& mat) = 0;
 };
 
 
@@ -141,7 +141,7 @@ public:
 //		setMaterial(material(float4(.7f,.7f,.7f,1), float4(1,1,1,0), float4(.2f, .2f, .2f, 1)));
 //	}
 //
-//	virtual inline void setTexture(Texture2D* tex) override
+//	virtual inline void setTexture(texture2d* tex) override
 //	{
 //		difTex = tex->shaderResourceView();
 //		dtex_change = true;

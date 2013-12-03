@@ -1,9 +1,9 @@
 
-#include "RenderTextureCube.h"
+#include "render_texture_cube.h"
 
 
-RenderTextureCube::	RenderTextureCube(ComPtr<ID3D11Device> device, uint cubeMapSize)
-	: TextureCube(device, CD3D11_TEXTURE2D_DESC(
+render_texture_cube::render_texture_cube(ComPtr<ID3D11Device> device, uint cubeMapSize)
+	: texture_cube(device, CD3D11_TEXTURE2D_DESC(
 	DXGI_FORMAT_R8G8B8A8_UNORM, cubeMapSize,
 	cubeMapSize, 6, 1, 
 	D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE,
@@ -28,14 +28,14 @@ RenderTextureCube::	RenderTextureCube(ComPtr<ID3D11Device> device, uint cubeMapS
 	chr(device->CreateDepthStencilView(te2d.Get(), &dsvd, dsv.GetAddressOf()));
 }
 
-void RenderTextureCube::OMBind(ComPtr<ID3D11DeviceContext> context, int idx)
+void render_texture_cube::om_bind(ComPtr<ID3D11DeviceContext> context, int idx)
 {
 	CD3D11_VIEWPORT vp(0.f, 0.f, _cmsize, _cmsize);
 	context->RSSetViewports(1, &vp);
 	context->OMSetRenderTargets(1, rtvs[idx].GetAddressOf(), dsv.Get());
 }
 
-void RenderTextureCube::OMUnbind(ComPtr<ID3D11DeviceContext> context, int idx)
+void render_texture_cube::om_unbind(ComPtr<ID3D11DeviceContext> context, int idx)
 {
 	context->RSSetViewports(1, nullptr);
 	ID3D11RenderTargetView* nullrtv[] = { nullptr };

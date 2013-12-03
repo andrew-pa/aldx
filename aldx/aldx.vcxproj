@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClCompile Include="bofile.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="DDSTexture.cpp" />
     <ClCompile Include="dx_app.cpp" />
     <ClCompile Include="gamepad.cpp" />
     <ClCompile Include="game_object.cpp" />
@@ -79,12 +80,13 @@
     <ClCompile Include="shadow_map.cpp" />
     <ClCompile Include="states.cpp" />
     <ClCompile Include="texture2d.cpp" />
-    <ClCompile Include="texturecube.cpp" />
+    <ClCompile Include="texture_cube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bofile.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="constant_buffer.h" />
+    <ClInclude Include="DDSTexture.h" />
     <ClInclude Include="dx_app.h" />
     <ClInclude Include="gamepad.h" />
     <ClInclude Include="game_object.h" />

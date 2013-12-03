@@ -1,8 +1,8 @@
 
-#include "Mesh.h"
+#include "mesh.h"
 
 
-Mesh::Mesh(ComPtr<ID3D11Device> device, void* vertices, void* indices,
+mesh::mesh(ComPtr<ID3D11Device> device, void* vertices, void* indices,
 		   uint32 _indexCount, uint32 _vertexCount, size_t _vertexStride, std::string _mesh_name, D3D11_PRIMITIVE_TOPOLOGY _topo)
 		   : indexCount(_indexCount), vertexCount(_vertexCount), vertexStride(_vertexStride), topology(_topo), _name(_mesh_name)
 {
@@ -16,7 +16,7 @@ Mesh::Mesh(ComPtr<ID3D11Device> device, void* vertices, void* indices,
 	chr(device->CreateBuffer(&index_bfds, &index_srd, &indexBuffer));
 }
 
-void Mesh::Draw(ComPtr<ID3D11DeviceContext> context, UINT startidx, UINT basevtx)
+void mesh::draw(ComPtr<ID3D11DeviceContext> context, UINT startidx, UINT basevtx)
 {
 	UINT stride = vertexStride;
 	UINT offset = 0;
@@ -26,7 +26,7 @@ void Mesh::Draw(ComPtr<ID3D11DeviceContext> context, UINT startidx, UINT basevtx
 	context->DrawIndexed(indexCount, startidx, basevtx);
 }
 
-void MeshCreateBox(float w, float h, float d, 
+void mesh_create_box(float w, float h, float d, 
 			   void*& vertices, void*& indices, uint32& indexCount, uint32& vertexCount)
 {
 	dvertex* v = new dvertex[24];
@@ -103,7 +103,7 @@ void MeshCreateBox(float w, float h, float d,
 	vertexCount = 24;
 }
 
-void MeshCreateGrid(float w, float d, UINT  m, UINT n, 
+void mesh_create_grid(float w, float d, UINT  m, UINT n, 
 				void*& vertices, void*& indices, uint32& indexCount, uint32& vertexCount)
 {
 	UINT vtxc = m*n;
@@ -153,7 +153,7 @@ void MeshCreateGrid(float w, float d, UINT  m, UINT n,
 	vertexCount = vtxc;
 }
 
-void MeshCreateSphere(float radius, UINT sliceCount, UINT stackCount, 
+void mesh_create_sphere(float radius, UINT sliceCount, UINT stackCount, 
 				  std::vector<dvertex>* pvertices, std::vector<uint>* pindices, uint32& indexCount, uint32& vertexCount)
 {
 	std::vector<dvertex>* vertices = pvertices;

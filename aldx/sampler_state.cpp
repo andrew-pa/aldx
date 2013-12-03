@@ -1,8 +1,8 @@
 
-#include "SamplerState.h"
+#include "states.h"
 
 
-SamplerState::SamplerState(ComPtr<ID3D11Device> device, int slotidx, D3D11_FILTER filter, 
+sampler_state::sampler_state(ComPtr<ID3D11Device> device, int slotidx, D3D11_FILTER filter, 
 		D3D11_TEXTURE_ADDRESS_MODE addressMode, 
 		uint maxAniso, float4 borderColor,
 		D3D11_COMPARISON_FUNC compareFunc)
@@ -21,7 +21,7 @@ SamplerState::SamplerState(ComPtr<ID3D11Device> device, int slotidx, D3D11_FILTE
 	chr(device->CreateSamplerState(&smd, sampl.GetAddressOf()));
 }
 
-void SamplerState::Bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
+void sampler_state::bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
 {
 	switch (stage)
 	{
@@ -46,7 +46,7 @@ void SamplerState::Bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
 	}
 }
 
-void SamplerState::Unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
+void sampler_state::unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
 {
 	ID3D11SamplerState* nullsmps[] = { nullptr };
 	switch (stage)

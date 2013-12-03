@@ -57,10 +57,13 @@
     <ClCompile Include="texture2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="texturecube.cpp">
+    <ClCompile Include="dx_app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dx_app.cpp">
+    <ClCompile Include="DDSTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texture_cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -132,6 +135,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dx_app.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

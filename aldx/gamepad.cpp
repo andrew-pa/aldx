@@ -2,7 +2,7 @@
 #include "Gamepad.h"
 
 
-Gamepad::Gamepad(DWORD uzrIdx)
+gamepad::gamepad(DWORD uzrIdx)
 	: usrIdx(uzrIdx)
 {
 }

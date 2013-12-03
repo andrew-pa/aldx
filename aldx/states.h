@@ -16,7 +16,7 @@ public:
 	inline ComPtr<ID3D11BlendState>& blendState() { return _state; }
 
 	void om_bind(ComPtr<ID3D11DeviceContext> context, float4 blendFactor = float4(1,1,1,1), uint32 sampleMask = D3D11_DEFAULT_SAMPLE_MASK);
-	void pm_unbind(ComPtr<ID3D11DeviceContext> context);
+	void om_unbind(ComPtr<ID3D11DeviceContext> context);
 };
 
 //rasterizer_state

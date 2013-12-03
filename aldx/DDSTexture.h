@@ -18,24 +18,24 @@
 #pragma once
 #include "helper.h"
 
-void CreateDDSTextureFromMemory(
-	_In_ ID3D11Device* d3dDevice,
-	_In_reads_bytes_(ddsDataSize) const byte* ddsData,
-	_In_ size_t ddsDataSize,
-	_Out_opt_ ID3D11Resource** texture,
-	_Out_opt_ ID3D11ShaderResourceView** textureView,
-	_In_ size_t maxsize = 0
-	);
-
-inline ID3D11ShaderResourceView* CreateSRVDDSTextureFromMemory(ID3D11Device* d, const byte* ddsData, size_t ddsDataSize)
-{
-	ID3D11ShaderResourceView* r;
-	CreateDDSTextureFromMemory(d, ddsData, ddsDataSize, nullptr, &r);
-	return r;
-}
-
-//DDSCreateSRVFromMemory : Wrapper around CreateSRVDDSTextureFromMemory for a datablob<byte>
-inline ID3D11ShaderResourceView* DDSCreateSRVFromMemory(ID3D11Device* device, datablob<byte>* data)
-{
-	return CreateSRVDDSTextureFromMemory(device, data->data, data->length);
-}
+//void CreateDDSTextureFromMemory(
+//	_In_ ID3D11Device* d3dDevice,
+//	_In_reads_bytes_(ddsDataSize) const byte* ddsData,
+//	_In_ size_t ddsDataSize,
+//	_Out_opt_ ID3D11Resource** texture,
+//	_Out_opt_ ID3D11ShaderResourceView** textureView,
+//	_In_ size_t maxsize = 0
+//	);
+//
+//inline ID3D11ShaderResourceView* CreateSRVDDSTextureFromMemory(ID3D11Device* d, const byte* ddsData, size_t ddsDataSize)
+//{
+//	ID3D11ShaderResourceView* r;
+//	CreateDDSTextureFromMemory(d, ddsData, ddsDataSize, nullptr, &r);
+//	return r;
+//}
+//
+////DDSCreateSRVFromMemory : Wrapper around CreateSRVDDSTextureFromMemory for a datablob<byte>
+//inline ID3D11ShaderResourceView* DDSCreateSRVFromMemory(ID3D11Device* device, datablob<byte>* data)
+//{
+//	return CreateSRVDDSTextureFromMemory(device, data->data, data->length);
+//}

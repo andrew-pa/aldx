@@ -20,7 +20,7 @@ struct dvertex
 };
 
 //mesh
-// A mesh object, basically a index and vertex buffer. Try to use Model instead
+// A mesh object, basically a index and vertex buffer. Try to use model instead
 //* !! Does not store CPU copies of Vertices or Indices !!
 class mesh
 {

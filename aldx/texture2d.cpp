@@ -1,7 +1,7 @@
 
-#include "Texture2D.h"
+#include "texture2d.h"
 
-void Texture2D::Bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int slot)
+void texture2d::bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int slot)
 {
 	switch (stage)
 	{
@@ -26,7 +26,7 @@ void Texture2D::Bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int
 	}
 }
 
-void Texture2D::Unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int slot)
+void texture2d::unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int slot)
 {
 	ID3D11ShaderResourceView* nullsrvs[] = { nullptr };
 	switch (stage)

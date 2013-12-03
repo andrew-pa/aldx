@@ -1,9 +1,9 @@
 
-#include "RenderTexture.h"
+#include "render_texture.h"
 
 
-RenderTexture::RenderTexture(ComPtr<ID3D11Device> device, float2 size)
-	: Texture2D(device, 
+render_texture::render_texture(ComPtr<ID3D11Device> device, float2 size)
+	: texture2d(device, 
 		CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_R32G32B32A32_FLOAT, (UINT)size.x, (UINT)size.y, 
 		1, 1, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)), _size(size)
 {
@@ -23,21 +23,21 @@ RenderTexture::RenderTexture(ComPtr<ID3D11Device> device, float2 size)
 	chr(device->CreateRenderTargetView(texd.Get(), &rsvd, rtv.GetAddressOf()));
 }
 
-void RenderTexture::OMBind(ComPtr<ID3D11DeviceContext> context)
+void render_texture::om_bind(ComPtr<ID3D11DeviceContext> context)
 {
 	CD3D11_VIEWPORT vp(0.f, 0.f, _size.x, _size.y);
 	context->RSSetViewports(1, &vp);
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
 }
 
-void RenderTexture::OMUnbind(ComPtr<ID3D11DeviceContext> context)
+void render_texture::om_unbind(ComPtr<ID3D11DeviceContext> context)
 {
 	ID3D11RenderTargetView* nullrtvs[] = { nullptr };
 	context->OMSetRenderTargets(1, nullrtvs, dsv.Get());
 }
 
-DepthRenderTexture::DepthRenderTexture(ComPtr<ID3D11Device> device, float2 size)
-	: Texture2D(device, 
+depth_render_texture::depth_render_texture(ComPtr<ID3D11Device> device, float2 size)
+	: texture2d(device, 
 		CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_R24G8_TYPELESS, (UINT)size.x, (UINT)size.y, 
 			1, 1, D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE), 
 			CD3D11_SHADER_RESOURCE_VIEW_DESC(D3D11_SRV_DIMENSION_TEXTURE2D, DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
@@ -51,7 +51,7 @@ DepthRenderTexture::DepthRenderTexture(ComPtr<ID3D11Device> device, float2 size)
 	chr(device->CreateDepthStencilView(texd.Get(), &dsvd, dsv.GetAddressOf()));
 }
 
-void DepthRenderTexture::OMBind(ComPtr<ID3D11DeviceContext> context)
+void depth_render_texture::om_bind(ComPtr<ID3D11DeviceContext> context)
 {
 	CD3D11_VIEWPORT vp(0.f, 0.f, _size.x, _size.y);
 	context->RSSetViewports(1, &vp);
@@ -59,7 +59,7 @@ void DepthRenderTexture::OMBind(ComPtr<ID3D11DeviceContext> context)
 	context->OMSetRenderTargets(1, nulltargets, dsv.Get());
 }
 
-void DepthRenderTexture::OMUnbind(ComPtr<ID3D11DeviceContext> context)
+void depth_render_texture::om_unbind(ComPtr<ID3D11DeviceContext> context)
 {
 	ID3D11RenderTargetView* nulltargets[] = { nullptr };
 	context->OMSetRenderTargets(1, nulltargets, nullptr);

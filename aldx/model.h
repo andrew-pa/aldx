@@ -4,7 +4,7 @@
 #include "bofile.h"
 
 //system_mesh
-// Mesh in system memory
+// mesh in system memory
 struct system_mesh
 {
 public:
@@ -15,7 +15,7 @@ public:
 	uint32 vc, ic;
 };
 
-//Model
+//model
 // A collection of meshes, with associated materials, textures, worlds
 class model
 {

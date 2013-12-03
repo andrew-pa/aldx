@@ -8,16 +8,16 @@ camera::camera(float3 pos, float3 look, float n, float f, float fov)
 	load3as(pos, P);
 	load3as(look, L);
 	mvector up = XMVectorSet(0,1,0, 0);
-	LookAt(P, L, up);
+	look_at(P, L, up);
 }
 
-void camera::UpdateProj(float aspectRatio)
+void camera::update_proj(float aspectRatio)
 {
 	XMStoreFloat4x4(&_proj, 
 		XMMatrixPerspectiveFovLH(_fovAngle, aspectRatio, _nearp, _farp));
 }
 
-void camera::UpdateView()
+void camera::update_view()
 {
 	mvector r = XMLoadFloat3(&_right);
 	mvector u = XMLoadFloat3(&_up);
@@ -44,7 +44,7 @@ void camera::UpdateView()
 	_view(3, 0) = x;			_view(3, 1) = y;		_view(3, 2) = z;			_view(3, 3) = 1.0f;
 }
 
-void camera::LookAt(FXMVECTOR pos, FXMVECTOR target, FXMVECTOR worldUp)
+void camera::look_at(FXMVECTOR pos, FXMVECTOR target, FXMVECTOR worldUp)
 {
 	XMVECTOR L = XMVector3Normalize(XMVectorSubtract(target, pos));
 	XMVECTOR R = XMVector3Normalize(XMVector3Cross(worldUp, L));
@@ -56,21 +56,21 @@ void camera::LookAt(FXMVECTOR pos, FXMVECTOR target, FXMVECTOR worldUp)
 	XMStoreFloat3(&_up, U);
 }
 
-void camera::LookAt(const XMFLOAT3& pos, const XMFLOAT3& target, const XMFLOAT3& up)
+void camera::look_at(const XMFLOAT3& pos, const XMFLOAT3& target, const XMFLOAT3& up)
 {
 	XMVECTOR P = XMLoadFloat3(&pos);
 	XMVECTOR T = XMLoadFloat3(&target);
 	XMVECTOR U = XMLoadFloat3(&up);
 
-	LookAt(P, T, U);
+	look_at(P, T, U);
 }
 
-void camera::Target(float3 targ)
+void camera::target(float3 targ)
 {
-	LookAt(_position, targ, _up);
+	look_at(_position, targ, _up);
 }
 
-void camera::Forward(float d)
+void camera::forward(float d)
 {
 	mvector s = XMVectorReplicate(d);
 	mvector l = XMLoadFloat3(&_look);
@@ -78,7 +78,7 @@ void camera::Forward(float d)
 	XMStoreFloat3(&_position, XMVectorMultiplyAdd(s, l, p));
 }
 
-void camera::Strafe(float d)
+void camera::strafe(float d)
 {
 	mvector s = XMVectorReplicate(d);
 	mvector r = XMLoadFloat3(&_right);
@@ -86,21 +86,21 @@ void camera::Strafe(float d)
 	XMStoreFloat3(&_position, XMVectorMultiplyAdd(s, r, p));
 }
 
-void camera::Yaw(float angle)
+void camera::yaw(float angle)
 {
 	matrix r = XMMatrixRotationAxis(XMLoadFloat3(&_up), angle);
 	XMStoreFloat3(&_right, XMVector3TransformNormal(XMLoadFloat3(&_right), r));
 	XMStoreFloat3(&_up, XMVector3TransformNormal(XMLoadFloat3(&_up), r));
 	XMStoreFloat3(&_look, XMVector3TransformNormal(XMLoadFloat3(&_look), r));
 }
-void camera::Pitch(float angle)
+void camera::pitch(float angle)
 {
 	matrix r = XMMatrixRotationAxis(XMLoadFloat3(&_right), angle);
 	XMStoreFloat3(&_right, XMVector3TransformNormal(XMLoadFloat3(&_right), r));
 	XMStoreFloat3(&_up, XMVector3TransformNormal(XMLoadFloat3(&_up), r));
 	XMStoreFloat3(&_look, XMVector3TransformNormal(XMLoadFloat3(&_look), r));
 }
-void camera::Roll(float angle)
+void camera::roll(float angle)
 {
 	matrix r = XMMatrixRotationAxis(XMLoadFloat3(&_look), angle);
 	XMStoreFloat3(&_right, XMVector3TransformNormal(XMLoadFloat3(&_right), r));
@@ -108,7 +108,7 @@ void camera::Roll(float angle)
 	XMStoreFloat3(&_look, XMVector3TransformNormal(XMLoadFloat3(&_look), r));
 }
 
-void camera::RotateWorldY(float angle)
+void camera::rotate_worldY(float angle)
 {
 	matrix r = XMMatrixRotationY(angle);
 	XMStoreFloat3(&_right, XMVector3TransformNormal(XMLoadFloat3(&_right), r));
@@ -118,14 +118,14 @@ void camera::RotateWorldY(float angle)
 
 //
 
-Trackingcamera::Trackingcamera(float3 pos, float3 look, float n, float f, float fov,
+tracking_camera::tracking_camera(float3 pos, float3 look, float n, float f, float fov,
 							   float minD, float maxD, float camTargHeight)
 							   : camera(pos, look, n, f, fov), _minDist(minD), _maxDist(maxD), _targetHeight(camTargHeight)
 {
 
 }
 
-void Trackingcamera::Update(float3 trackPos)
+void tracking_camera::update(float3 trackPos)
 {
 	_position.y = _targetHeight;
 	load3as(trackPos, TP);
@@ -138,8 +138,8 @@ void Trackingcamera::Update(float3 trackPos)
 	if(camdist > _maxDist)
 		corrf = .15f * (_maxDist-camdist)/camdist;
 	auto cpos = P - corrf*camToObj;
-	LookAt(cpos, TP, XMVectorSet(0, 1, 0, 0));
-	UpdateView();
+	look_at(cpos, TP, XMVectorSet(0, 1, 0, 0));
+	update_view();
 	/*_position.y = _targetHeight;
 	float3 camToObj = (trackPos) - _position;
 	float camDist = length(camToObj);
