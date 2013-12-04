@@ -95,7 +95,6 @@
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="vector_math.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="render_shader.h" />
     <ClInclude Include="render_texture.h" />
     <ClInclude Include="render_texture_cube.h" />
@@ -103,7 +102,6 @@
     <ClInclude Include="shader.h" />
     <ClInclude Include="shadow_map.h" />
     <ClInclude Include="states.h" />
-    <ClInclude Include="targetver.h" />
     <ClInclude Include="texture2d.h" />
     <ClInclude Include="texture_cube.h" />
     <ClInclude Include="timer.h" />
