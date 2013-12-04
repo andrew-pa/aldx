@@ -5,13 +5,11 @@
 #include <wrl.h>
 #include <ppl.h>
 #include <ppltasks.h>
+
 #include "vector_math.h"
-#include "DDSTexture.h"
 
 #include <d3d11_2.h>
 #include <d2d1_2.h>
-
-typedef unsigned int uint;
 
 #include <map>
 #include <string>
@@ -28,6 +26,7 @@ using namespace std;
 
 
 using Microsoft::WRL::ComPtr;
+typedef unsigned int uint;
 
 #ifdef LINK_DIRECTX
 /*d2d1.lib

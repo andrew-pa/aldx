@@ -1,5 +1,6 @@
 #pragma once
 #include "helper.h"
+#include "DDSTexture.h"
 
 //texture2d
 // Generic 2D texture. Provides both texture2d and ShaderResourceView objects 
@@ -47,8 +48,7 @@ public:
 	texture2d(ComPtr<ID3D11Device> device, datablob<byte>* ddsData)
 	{
 		ComPtr<ID3D11Resource> res;
-		//CreateDDSTextureFromMemory(device.Get(), ddsData->data, ddsData->length, res.GetAddressOf(), srv.GetAddressOf());
-		throw exception("Implement this!");
+		CreateDDSTextureFromMemory(device.Get(), ddsData->data, ddsData->length, res.GetAddressOf(), srv.GetAddressOf());
 		res.As(&texd);
 	}
 
