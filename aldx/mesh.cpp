@@ -153,11 +153,10 @@ mesh* mesh::create_grid(ComPtr<ID3D11Device> device, float w, float d, uint m, u
 	return new mesh(device, vertices, indices, indexCount, vertexCount, sizeof(dvertex), mesh_name);
 }
 
-void mesh_create_sphere(float radius, UINT sliceCount, UINT stackCount, 
-				  std::vector<dvertex>* pvertices, std::vector<uint>* pindices, uint32& indexCount, uint32& vertexCount)
+mesh* mesh::create_sphere(ComPtr<ID3D11Device> device, float radius, uint sliceCount, uint stackCount, const string& mesh_name)
 {
-	std::vector<dvertex>* vertices = pvertices;
-	std::vector<UINT>* indices = pindices;
+	std::vector<dvertex>* vertices = new vector<dvertex>;
+	std::vector<UINT>* indices = new std::vector<uint>;
 
 	dvertex topv(0.0f, +radius, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	dvertex botv(0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
@@ -217,6 +216,6 @@ void mesh_create_sphere(float radius, UINT sliceCount, UINT stackCount,
 		indices->push_back(bi+i+1);
 	}
 
-	indexCount = indices->size();
-	vertexCount = vertices->size();
+
+	return new mesh(device, &(*vertices)[0], &(*indices)[0], indices->size(), vertices->size(), sizeof(dvertex), mesh_name);
 }

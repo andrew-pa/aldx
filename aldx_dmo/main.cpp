@@ -86,7 +86,7 @@ public:
 			read_data_from_package(L"simple_vs.cso"),
 			read_data_from_package(L"simple_ps.cso"), posnormtex_layout, _countof(posnormtex_layout));
 
-		m = mesh::create_box(device, 1, 1, 1);
+		m = mesh::create_sphere(device, 1.f, 32, 32);
 	}
 	void update(float t, float dt) override
 	{

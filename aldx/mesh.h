@@ -50,8 +50,5 @@ public:
 
 	static mesh* create_box(ComPtr<ID3D11Device> device, float w, float h, float d, const string& mesh_name = "box");
 	static mesh* create_grid(ComPtr<ID3D11Device> device, float w, float d, uint m, uint n, const string& mesh_name = "grid");
+	static mesh* create_sphere(ComPtr<ID3D11Device> device, float radius, uint sliceCount, uint stackCount, const string& mesh_name = "uv_sphere");
 };
-
-//Create a UV Sphere
-void mesh_create_sphere(float radius, UINT sliceCount, UINT stackCount, 
-				  std::vector<dvertex>* pvertices, std::vector<uint>* pindices, uint32& indexCount, uint32& vertexCount);
