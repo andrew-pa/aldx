@@ -282,21 +282,21 @@ void  dx_app::update_window_size()
 		create_window_size_depres();
 }
 
-void  dx_app::ApplyOMSettings()
-{
-#ifdef MSAA
-	context->OMSetRenderTargets(1, offscreenRenderTargetView.GetAddressOf(), depthStencilView.Get());
-#else
-	context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
-#endif
-		CD3D11_VIEWPORT viewport(
-		0.0f,
-		0.0f,
-		renderTargetSize.width,
-		renderTargetSize.height
-		);
-		context->RSSetViewports(1, &viewport); 
-}
+//void  dx_app::ApplyOMSettings()
+//{
+//#ifdef MSAA
+//	context->OMSetRenderTargets(1, offscreenRenderTargetView.GetAddressOf(), depthStencilView.Get());
+//#else
+//	context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
+//#endif
+//		CD3D11_VIEWPORT viewport(
+//		0.0f,
+//		0.0f,
+//		renderTargetSize.width,
+//		renderTargetSize.height
+//		);
+//		context->RSSetViewports(1, &viewport); 
+//}
 
 void dx_app::present()
 {
@@ -485,7 +485,7 @@ static LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-int dx_app::run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int cliW, int cliH)
+int dx_app::run(HINSTANCE hInst, int showCmd, const wstring& windowTitle, int cliW, int cliH)
 {
 	WNDCLASS wc;
 	wc.style         = CS_HREDRAW | CS_VREDRAW;
@@ -511,7 +511,7 @@ int dx_app::run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int cl
 
 	auto ti = new timer();
 
-	HWND wnd = CreateWindow(L"DXAppWndClass", windowTitle, WS_OVERLAPPEDWINDOW, 100,
+	HWND wnd = CreateWindow(L"DXAppWndClass", windowTitle.c_str(), WS_OVERLAPPEDWINDOW, 100,
 		100, w, h, 0, 0, hInst, 0);
 	if(!wnd)
 	{

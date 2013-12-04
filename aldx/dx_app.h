@@ -65,7 +65,7 @@ public:
 	virtual void present();
 
 #ifdef WIN32
-	int run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int cliW, int cliH);
+	int run(HINSTANCE hInst, int showCmd, const wstring& windowTitle, int cliW, int cliH);
 #endif
 
 #ifdef D2D
@@ -89,8 +89,6 @@ protected:
 	ComPtr<IDXGISwapChain1> swapChain;
 	ComPtr<ID3D11RenderTargetView> renderTargetView;
 	ComPtr<ID3D11DepthStencilView> depthStencilView;
-
-	void ApplyOMSettings();
 
 #ifdef MSAA
 	ComPtr<ID3D11Texture2D> backBuffer;
