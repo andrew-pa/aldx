@@ -1,5 +1,5 @@
 
-#include " dx_app.h"
+#include "dx_app.h"
 #include <string>
 #include <sstream>
 
@@ -7,7 +7,7 @@ using namespace Microsoft::WRL;
 
 #define DP_LOGICALDPI 96.0f
 
- dx_app:: dx_app()
+ dx_app::dx_app()
 	: windowSizeChanged(true), drawFPSCounter(false), vsync(true)
 #ifdef MSAA
 	, msaa_level(4)
@@ -15,11 +15,11 @@ using namespace Microsoft::WRL;
 {
 }
 
- dx_app::~ dx_app()
+dx_app::~ dx_app()
 {
 }
 
-void  dx_app::Init(HWND window)
+void dx_app::Init(HWND window)
 {
 	this->window = window;
 

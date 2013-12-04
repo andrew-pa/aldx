@@ -773,7 +773,7 @@ static HRESULT CreateD3DResources(
 							else
 							{
 								SRVDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURECUBE;
-								SRVDesc.texture_cube.MipLevels = desc.MipLevels;
+								SRVDesc.TextureCube.MipLevels = desc.MipLevels;
 							}
 						}
 						else if (arraySize > 1)
@@ -785,7 +785,7 @@ static HRESULT CreateD3DResources(
 						else
 						{
 							SRVDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
-							SRVDesc.texture2d.MipLevels = desc.MipLevels;
+							SRVDesc.Texture2D.MipLevels = desc.MipLevels;
 						}
 
 						hr = d3dDevice->CreateShaderResourceView(tex, &SRVDesc, textureView);

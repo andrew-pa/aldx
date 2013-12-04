@@ -34,8 +34,8 @@ public:
 		std::vector<system_mesh>& sysmeshs);
 	model(ComPtr<ID3D11Device> device, bo_file* b);
 
-	proprw(std::vector<mesh*>, Meshes, { return _meshes; })
-	proprw(std::vector<float4x4>, Worlds, { return _worlds; })
+	proprw(std::vector<mesh*>, meshes, { return _meshes; })
+	proprw(std::vector<float4x4>, worlds, { return _worlds; })
 
 	struct vertex
 	{

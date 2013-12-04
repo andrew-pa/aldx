@@ -1,7 +1,7 @@
 
 #include "game_object.h"
 
-voidgame_object::Update(float,float)
+void game_object::update(float,float)
 {
 	load3(pos);
 	load3(rot);
@@ -12,30 +12,30 @@ voidgame_object::Update(float,float)
 		XMMatrixTranslationFromVector(vpos));
 }
 
-voidgame_object::Draw(ComPtr<ID3D11DeviceContext1> context)
+void game_object::draw(ComPtr<ID3D11DeviceContext1> context)
 {
 	_shader->Bind(context);
 	
-	for(uint i = 0; i < _model->Meshes().size(); ++i)
+	for(uint i = 0; i < _model->meshes().size(); ++i)
 	{
-		_shader->world(_world*(_model->Worlds()[i]));
-		_shader->setMaterial(mats[i].mat);
-		_shader->setTexture(_textures[mats[i].texture_index]);
-		_shader->Update(context);
-		_model->Meshes()[i]->Draw(context);
+		_shader->world(_world*(_model->worlds()[i]));
+		_shader->set_material(mats[i].mat);
+		_shader->set_texture(_textures[mats[i].texture_index]);
+		_shader->update(context);
+		_model->meshes()[i]->draw(context);
 	}
 }
 
-voidgame_object::DrawWithShader(ComPtr<ID3D11DeviceContext1> context, IRenderShader* shad)
+void game_object::draw_with_shader(ComPtr<ID3D11DeviceContext1> context, render_shader* shad)
 {
 	shad->Bind(context);
 	
-	for(uint i = 0; i < _model->Meshes().size(); ++i)
+	for(uint i = 0; i < _model->meshes().size(); ++i)
 	{
-		shad->world(_world*(_model->Worlds()[i]));
-		shad->setMaterial(mats[i].mat);
-		shad->setTexture(_textures[mats[i].texture_index]);
-		shad->Update(context);
-		_model->Meshes()[i]->Draw(context);
+		shad->world(_world*(_model->worlds()[i]));
+		shad->set_material(mats[i].mat);
+		shad->set_texture(_textures[mats[i].texture_index]);
+		shad->update(context);
+		_model->meshes()[i]->draw(context);
 	}
 }
