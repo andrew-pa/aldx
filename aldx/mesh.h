@@ -47,15 +47,10 @@ public:
 	proprw(size_t, vertex_stride, { return vertexStride; })
 	proprw(D3D11_PRIMITIVE_TOPOLOGY, prim_topology, { return topology; })
 	proprw(std::string, name, { return _name; });
+
+	static mesh* create_box(ComPtr<ID3D11Device> device, float w, float h, float d, const string& mesh_name = "box");
+	static mesh* create_grid(ComPtr<ID3D11Device> device, float w, float d, uint m, uint n, const string& mesh_name = "grid");
 };
-
-//Create a box
-void mesh_create_box(float w, float h, float d, 
-			   void*& vertices, void*& indices, uint32& indexCount, uint32& vertexCount);
-
-//Create a tessellated grid
-void mesh_create_grid(float w, float d, UINT  m, UINT n, 
-				void*& vertices, void*& indices, uint32& indexCount, uint32& vertexCount);
 
 //Create a UV Sphere
 void mesh_create_sphere(float radius, UINT sliceCount, UINT stackCount, 

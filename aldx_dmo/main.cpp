@@ -72,29 +72,21 @@ public:
 	}
 };
 
-mesh* create_box(ComPtr<ID3D11Device> device, float w, float h, float d)
-{
-	void* v, *i;
-	uint32 ic, vc;
-	mesh_create_box(w, h, d, v, i, ic, vc);
-	return new mesh(device, v, i, ic, vc, sizeof(dvertex), "box");
-}
-
 class aldx_demo_app : public dx_app
 {
 	simple_shader ss;
 	camera cam;
 	mesh* m;
 public:
-	aldx_demo_app() : dx_app(true), 
-		cam(float3(0, 1, -5), float3(0,0.1f,0), 0.1f, 1000, XMConvertToRadians(45.f)) {}
+	aldx_demo_app() : dx_app(8, true), 
+		cam(float3(0, 2.5f, -5), float3(0,0.1f,0), 0.1f, 1000, XMConvertToRadians(45.f)) {}
 	void load() override
 	{
 		ss = simple_shader(device,
 			read_data_from_package(L"simple_vs.cso"),
 			read_data_from_package(L"simple_ps.cso"), posnormtex_layout, _countof(posnormtex_layout));
 
-		m = create_box(device, 1, 1, 1);
+		m = mesh::create_box(device, 1, 1, 1);
 	}
 	void update(float t, float dt) override
 	{
@@ -113,7 +105,7 @@ public:
 		ss.bind(context);	
 		
 		float4x4 world;
-		XMStoreFloat4x4(&world, XMMatrixIdentity());
+		XMStoreFloat4x4(&world, XMMatrixRotationRollPitchYaw(t*.2f, t*.5f, t*.3f));
 		ss.world(world);
 		ss.update(context);
 		m->draw(context);

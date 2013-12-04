@@ -7,7 +7,7 @@
 using Microsoft::WRL::ComPtr;
 
 #define D2D
-//#define MSAA
+#define MSAA
 
 #define DRAW_FPS 
 

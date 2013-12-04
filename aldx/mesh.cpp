@@ -26,8 +26,7 @@ void mesh::draw(ComPtr<ID3D11DeviceContext> context, UINT startidx, UINT basevtx
 	context->DrawIndexed(indexCount, startidx, basevtx);
 }
 
-void mesh_create_box(float w, float h, float d, 
-			   void*& vertices, void*& indices, uint32& indexCount, uint32& vertexCount)
+mesh* mesh::create_box(ComPtr<ID3D11Device> device, float w, float h, float d, const string& mesh_name)
 {
 	dvertex* v = new dvertex[24];
 
@@ -97,14 +96,14 @@ void mesh_create_box(float w, float h, float d,
 	i[30] = 20; i[31] = 21; i[32] = 22;
 	i[33] = 20; i[34] = 22; i[35] = 23;
 
-	vertices = v;
-	indices = i;
-	indexCount = 36;
-	vertexCount = 24;
+	auto vertices = v;
+	auto indices = i;
+	auto indexCount = 36;
+	auto vertexCount = 24;
+	return new mesh(device, vertices, indices, indexCount, vertexCount, sizeof(dvertex), mesh_name);
 }
 
-void mesh_create_grid(float w, float d, UINT  m, UINT n, 
-				void*& vertices, void*& indices, uint32& indexCount, uint32& vertexCount)
+mesh* mesh::create_grid(ComPtr<ID3D11Device> device, float w, float d, uint m, uint n, const string& mesh_name)
 {
 	UINT vtxc = m*n;
 	UINT fc = (m-1)*(n-1)*2;
@@ -147,10 +146,11 @@ void mesh_create_grid(float w, float d, UINT  m, UINT n,
 		}
 	}
 
-	vertices = v;
-	indices = ix;
-	indexCount = fc*3;
-	vertexCount = vtxc;
+	auto vertices = v;
+	auto indices = ix;
+	auto indexCount = fc*3;
+	auto vertexCount = vtxc;
+	return new mesh(device, vertices, indices, indexCount, vertexCount, sizeof(dvertex), mesh_name);
 }
 
 void mesh_create_sphere(float radius, UINT sliceCount, UINT stackCount, 
