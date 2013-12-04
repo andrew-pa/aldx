@@ -13,10 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Media">
+      <UniqueIdentifier>{c1d4bef3-ae92-4241-8d1d-0e955f890396}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="simple_ps.hlsl">
+      <Filter>Media</Filter>
+    </FxCompile>
+    <FxCompile Include="simple_vs.hlsl">
+      <Filter>Media</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

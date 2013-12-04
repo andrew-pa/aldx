@@ -11,7 +11,7 @@ class constant_buffer
 	int _slot;
 	ComPtr<ID3D11Buffer> _buffer;
 public:
-	//get or set the data. getorset is true if you are setting and false if you are getting
+	//get or set the data. getorset is true if you are setting and false if you are getting. defaults to setting(true)
 	inline T& data(bool getorset = true) { changed = (!getorset ? changed : true); return _data; }
 	inline int& bind_slot() { return _slot; }
 	inline ComPtr<ID3D11Buffer>& buffer() { return _buffer; }

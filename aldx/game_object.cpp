@@ -14,7 +14,7 @@ void game_object::update(float,float)
 
 void game_object::draw(ComPtr<ID3D11DeviceContext1> context)
 {
-	_shader->Bind(context);
+	_shader->bind(context);
 	
 	for(uint i = 0; i < _model->meshes().size(); ++i)
 	{
@@ -28,7 +28,7 @@ void game_object::draw(ComPtr<ID3D11DeviceContext1> context)
 
 void game_object::draw_with_shader(ComPtr<ID3D11DeviceContext1> context, render_shader* shad)
 {
-	shad->Bind(context);
+	shad->bind(context);
 	
 	for(uint i = 0; i < _model->meshes().size(); ++i)
 	{

@@ -57,8 +57,8 @@ public:
 	virtual void world(const float4x4& m) = 0;
 	virtual void view(const float4x4& m) = 0;
 	virtual void proj(const float4x4& m) = 0;
-	virtual void set_texture(texture2d* tex) = 0;
-	virtual void set_material(const material& mat) = 0;
+	virtual void set_texture(texture2d* tex) { }
+	virtual void set_material(const material& mat) { };
 };
 
 

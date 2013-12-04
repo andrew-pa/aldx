@@ -158,6 +158,11 @@ inline float4x4 transpose(const float4x4& a)
 	load4x4(a);
 	return4x4(XMMatrixTranspose(ma));
 }
+inline float4x4 inverse(const float4x4& a)
+{
+	load4x4(a);
+	return4x4(XMMatrixInverse(nullptr, ma));
+}
 
 inline float length(float3 a)
 {

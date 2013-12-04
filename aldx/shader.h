@@ -8,10 +8,10 @@ class ishader
 {
 public:
 	//Binds the shader to the context
-	virtual void Bind(ComPtr<ID3D11DeviceContext> context) = 0;
+	virtual void bind(ComPtr<ID3D11DeviceContext> context) = 0;
 
 	//Unbinds everything bound to the Context, effectively calls all context functions with nullptr instead of the object
-	virtual void Unbind(ComPtr<ID3D11DeviceContext> context) = 0;
+	virtual void unbind(ComPtr<ID3D11DeviceContext> context) = 0;
 };
 
 //shader

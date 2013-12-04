@@ -128,7 +128,7 @@ struct datablob
 #ifndef _DX_READ_DATA
 #define _DX_READ_DATA
 	//Read in the data contained in filename, put it in to a datablob
-	inline datablob<byte>* ReadData(
+	inline datablob<byte>* read_data(
 	_In_ const wchar_t* filename
 	)
 	{
@@ -182,8 +182,8 @@ struct datablob
 		return fileData;
 	}
 
-	//Wrapper for ReadData, but adds the executable path on to the file name
-	inline datablob<byte>* ReadDataFromPackage(_In_ const wchar_t* filename)
+	//Wrapper for read_data, but adds the executable path on to the file name
+	inline datablob<byte>* read_data_from_package(_In_ const wchar_t* filename)
 	{
 		static std::wstring fpath = L"";
 		if(fpath.length() == 0)
@@ -205,6 +205,6 @@ struct datablob
 		std::wstring fname(filename);
 		std::wstring fpn = fpath;
 		fpn += fname;
-		return ReadData(fpn.data());
+		return read_data(fpn.data());
 	}
 #endif

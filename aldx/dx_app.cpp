@@ -240,7 +240,7 @@ void  dx_app::create_window_size_depres()
 #ifdef MSAA
 		offscreenRenderTargetView, 
 #else
-		renderTargetView
+		renderTargetView,
 #endif
 		depthStencilView, viewport);
 
