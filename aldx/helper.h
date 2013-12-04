@@ -108,7 +108,7 @@ typedef UINT16 uint16;
 typedef UINT8 uint8;
 
 //datablob<T>
-// pointer to a T along with the T's size, usualy file data
+// pointer to a T along with the T's size, usually file data
 template<typename T>
 struct datablob
 {
