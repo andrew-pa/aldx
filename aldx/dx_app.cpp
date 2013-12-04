@@ -79,14 +79,14 @@ void  dx_app::create_device_res()
 	chr(d2factory->CreateDevice(dxgidevice.Get(), &d2device));
 	chr(d2device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &d2context));
 
-#ifdef INCLUDE_FPS_DRAW
+#ifdef DRAW_FPS
 	dwfactory->CreateTextFormat(L"Segoe UI", 
 		nullptr,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
-		14.f, L"en-US", ___fps_text_format.GetAddressOf());
-	d2context->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue), ___fps_text_brush.GetAddressOf());
+		14.f, L"en-US", _debug_text_format.GetAddressOf());
+	d2context->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue), _debug_text_brush.GetAddressOf());
 #endif
 
 #endif
@@ -300,15 +300,15 @@ void  dx_app::update_window_size()
 
 void dx_app::present()
 {
-#if defined(D2D) && defined(INCLUDE_FPS_DRAW)
+#if defined(D2D) && defined(DRAW_FPS)
 	//Hack to get FPS on top of everything else
 	if(drawFPSCounter)
 	{
 		d2context->BeginDraw();
 		std::wstringstream wss;
 		wss << "FPS: " << fps << " Frame Time: " << mspf << "\n";
-		d2context->DrawTextW(wss.str().c_str(), wss.str().length(), ___fps_text_format.Get(), 
-			D2D1::RectF(0, 0, 256, 32), ___fps_text_brush.Get());
+		d2context->DrawTextW(wss.str().c_str(), wss.str().length(), _debug_text_format.Get(), 
+			D2D1::RectF(0, 0, 200, 20), _debug_text_brush.Get());
 		d2context->EndDraw();
 	}
 #endif
