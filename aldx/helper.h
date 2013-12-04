@@ -17,6 +17,8 @@ typedef unsigned int uint;
 #include <string>
 #include <sstream>
 #include <vector>
+#include <stack>
+#include <map>
 #include <iostream>
 #include <fstream>
 #include <functional>

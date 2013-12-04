@@ -9,7 +9,7 @@ using Microsoft::WRL::ComPtr;
 #define D2D
 #define MSAA
 
-#define INCLUDE_FPS_DRAW
+#define DRAW_FPS 
 
 #ifdef WIN32
 #define USE_RAWINPUT
@@ -27,16 +27,35 @@ public:
 };
 
 typedef HWND window_type;
+//for lack of anything better
+#define DP_LOGICALDPI 96.0f
 #endif
+
+struct render_target
+{
+	ComPtr<ID3D11RenderTargetView> render_targetv;
+	ComPtr<ID3D11DepthStencilView> depth_stencil;
+	D3D11_VIEWPORT viewport;
+	render_target(ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv, D3D11_VIEWPORT vp)
+		: render_targetv(rtv), depth_stencil(dsv), viewport(vp)
+	{
+	}
+};
+
 
 //dx_app
 // Handles all DirectX (Direct3D/Direct2D) setup. Subclass to create new applications, then override the pure functions. Also includes FPS measuring and display if D2D is enabled
 class dx_app
 {
 public:
-	dx_app(window_type window);
-	virtual ~dx_app();
-
+	dx_app(
+#ifdef MSAA
+		int MSAA_level,
+#endif
+#ifdef DRAW_FPS
+		bool draw_fps
+#endif
+		);
 	virtual void create_device_res();
 	virtual void create_window_size_depres();
 	virtual void update_window_size();
@@ -53,8 +72,18 @@ public:
 	virtual void create_d2ddevice_indi_res();
 #endif
 
+	propr(render_target, current_render_target, { return render_target_stack.top(); })
+	inline void pop_render_target() 
+	{
+		if (render_target_stack.size() == 1) return; //maintain back buffer
+		render_target_stack.pop(); 
+	}
+	inline void push_render_target(ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv, 
+		D3D11_VIEWPORT vp)
+	{
+		render_target_stack.push(render_target(rtv, dsv, vp));
+	}
 protected:
-	inline float conv_dips_pixels(float dips);
 	ComPtr<ID3D11Device1> device;
 	ComPtr<ID3D11DeviceContext1> context;
 	ComPtr<IDXGISwapChain1> swapChain;
@@ -82,11 +111,11 @@ protected:
 	rect renderTargetSize;
 	rect windowBounds;
 	HWND window;
-	XMFLOAT4X4 orientationTransform;
+//	XMFLOAT4X4 orientationTransform;
 
 	bool windowSizeChanged;
 
-#if defined(D2D) && defined(INCLUDE_FPS_DRAW)
+#if defined(D2D) && defined(DRAW_FPS)
 	bool drawFPSCounter;	
 	ComPtr<IDWriteTextFormat> _debug_text_format;
 	ComPtr<ID2D1SolidColorBrush> _debug_text_brush;
@@ -94,4 +123,16 @@ protected:
 	float fps, mspf;
 
 	bool vsync;
+
+private:
+	stack<render_target> render_target_stack;
+
+	void init(window_type win);
+	inline float conv_dips_pixels(float dips)
+	{
+		static const float c = 96.0f;
+		return floor(dips * DP_LOGICALDPI / c + 0.5f);
+	}
+
+
 };

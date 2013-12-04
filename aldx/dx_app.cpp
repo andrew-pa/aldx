@@ -1,38 +1,37 @@
 
 #include "dx_app.h"
-#include <string>
-#include <sstream>
-
 using namespace Microsoft::WRL;
 
-#define DP_LOGICALDPI 96.0f
 
- dx_app::dx_app()
-	: windowSizeChanged(true), drawFPSCounter(false), vsync(true)
+dx_app::dx_app(
 #ifdef MSAA
-	, msaa_level(4)
+	 int MSAA_level,
+#endif
+#ifdef DRAW_FPS
+	 bool draw_fps
+#endif
+	 )
+	: windowSizeChanged(true), drawFPSCounter(draw_fps), vsync(true)
+#ifdef MSAA
+	, msaa_level(MSAA_level)
 #endif
 {
 }
 
-dx_app::~ dx_app()
+void dx_app::init(window_type win)
 {
-}
-
-void dx_app::Init(HWND window)
-{
-	this->window = window;
-
+	window = win;
 #ifdef D2D
-	CreateD2DDeviceIndiRes();
+	create_d2ddevice_indi_res();
 #endif
-	CreateDeviceRes();
-	CreateWindowSizeDepRes();
-	Load();
+	create_device_res();
+	create_window_size_depres();
+	load();
 }
 
+
 #ifdef D2D
-void  dx_app::CreateD2DDeviceIndiRes()
+void dx_app::create_d2ddevice_indi_res()
 {
 	D2D1_FACTORY_OPTIONS opt;
 	ZeroMemory(&opt, sizeof(D2D1_FACTORY_OPTIONS));
@@ -44,7 +43,7 @@ void  dx_app::CreateD2DDeviceIndiRes()
 }
 #endif D2D
 
-void  dx_app::CreateDeviceRes()
+void  dx_app::create_device_res()
 {
 	UINT creflg = 0;
 #ifdef D2D
@@ -93,7 +92,7 @@ void  dx_app::CreateDeviceRes()
 #endif
 }
 
-void  dx_app::CreateWindowSizeDepRes()
+void  dx_app::create_window_size_depres()
 {
 	windowSizeChanged = true;
 	RECT cre;
@@ -101,8 +100,8 @@ void  dx_app::CreateWindowSizeDepRes()
 	windowBounds.width = (float)(cre.right - cre.left);
 	windowBounds.height = (float)(cre.bottom - cre.top);
 
-	float winwidth = ConvDipsPixels(windowBounds.width);
-	float winheight = ConvDipsPixels(windowBounds.height);
+	float winwidth = conv_dips_pixels(windowBounds.width);
+	float winheight = conv_dips_pixels(windowBounds.height);
 
 	renderTargetView.Reset();
 	depthStencilView.Reset();
@@ -229,13 +228,21 @@ void  dx_app::CreateWindowSizeDepRes()
 
 #endif
 
-
 	CD3D11_VIEWPORT viewport(
 		0.0f,
 		0.0f,
 		renderTargetSize.width,
 		renderTargetSize.height
 		);
+
+	render_target_stack = stack<render_target>();
+	push_render_target(
+#ifdef MSAA
+		offscreenRenderTargetView, 
+#else
+		renderTargetView
+#endif
+		depthStencilView, viewport);
 
 	context->RSSetViewports(1, &viewport);
 #ifdef D2D
@@ -257,7 +264,7 @@ void  dx_app::CreateWindowSizeDepRes()
 #endif
 }
 
-void  dx_app::UpdateWindowSize()
+void  dx_app::update_window_size()
 {
 		RECT cre;
 	GetClientRect(window, &cre);
@@ -272,7 +279,7 @@ void  dx_app::UpdateWindowSize()
 		d2targetBitmap = nullptr;
 		d2context->SetDpi(DP_LOGICALDPI, DP_LOGICALDPI);
 #endif
-		CreateWindowSizeDepRes();
+		create_window_size_depres();
 }
 
 void  dx_app::ApplyOMSettings()
@@ -291,7 +298,7 @@ void  dx_app::ApplyOMSettings()
 		context->RSSetViewports(1, &viewport); 
 }
 
-void  dx_app::Present()
+void dx_app::present()
 {
 #if defined(D2D) && defined(INCLUDE_FPS_DRAW)
 	//Hack to get FPS on top of everything else
@@ -322,9 +329,10 @@ void  dx_app::Present()
 		windowBounds.height = 0;
 		swapChain = nullptr;
 		
-		CreateDeviceRes();
-		UpdateWindowSize();
-		Load();
+		create_device_res();
+		create_d2ddevice_indi_res();
+		update_window_size();
+		load();
 	}
 	else
 	{
@@ -332,13 +340,7 @@ void  dx_app::Present()
 	}
 }
 
-float  dx_app::ConvDipsPixels(float dips)
-{
-	static const float c = 96.0f;
-	return floor(dips * DP_LOGICALDPI / c + 0.5f);
-}
-
-void  dx_app::Render(float t, float dt)
+void  dx_app::render(float t, float dt)
 {
 	static uint64_t frameCnt = 0;
 	static float timElp = 0.0f;
@@ -350,24 +352,19 @@ void  dx_app::Render(float t, float dt)
 		frameCnt = 0;
 		timElp += 1.0f;
 	}
-#ifndef MSAA
 	const float clearColor[] = { 0.8f, 0.5f, 0.0f, 1.0f };
-	context->ClearRenderTargetView(renderTargetView.Get(), clearColor);
-	context->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-	context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
-#else
-	const float clearColor[] = { 0.8f, 0.5f, 0.0f, 1.0f };
-	context->ClearRenderTargetView(offscreenRenderTargetView.Get(), clearColor);
-	context->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-	context->OMSetRenderTargets(1, offscreenRenderTargetView.GetAddressOf(), depthStencilView.Get());
-#endif
+	context->ClearRenderTargetView(current_render_target().render_targetv.Get(), clearColor);
+	context->ClearDepthStencilView(current_render_target().depth_stencil.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+	context->OMSetRenderTargets(1, current_render_target().render_targetv.GetAddressOf(), current_render_target().depth_stencil.Get());
+	context->RSSetViewports(1, &render_target_stack.top().viewport);
 }
 
 //WIN32 stuff
+//Includes a bunch of bad weird hacks including globals and a static app var
 #ifdef WIN32
-#include "BasicTimer.h"
+#include "timer.h"
 #include <windowsx.h>
-#include "Input.h"
+#include "input.h"
 static bool paused = false;
 static bool resizeing = false;
 static  dx_app* app =nullptr;
@@ -397,7 +394,7 @@ static LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 			{
 				paused = false;
 				if(app != nullptr)
-					app->UpdateWindowSize();
+					app->update_window_size();
 			}
 			else if(wParam == SIZE_RESTORED)
 			{
@@ -408,7 +405,7 @@ static LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 				else
 				{
 					if(app != nullptr)
-						app->UpdateWindowSize();
+						app->update_window_size();
 				}
 			}
 		}
@@ -421,7 +418,7 @@ static LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 		paused = false;
 		resizeing = false;
 		if(app != nullptr)
-			app->UpdateWindowSize();
+			app->update_window_size();
 		return 0;
 	
 #ifdef USE_RAWINPUT
@@ -448,34 +445,34 @@ static LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 					m.x = mx;
 					m.y = my;
 				}
-				MouseButton mb = MouseButton::None;
+				mouse_button mb = mouse_button::none;
 				if(check_flag(rin->data.mouse.usButtonFlags, 
 					(USHORT)RI_MOUSE_LEFT_BUTTON_DOWN))
 				{
-					mb = mb | MouseButton::Left;
+					mb = mb | mouse_button::left;
 				}
 				if(check_flag(rin->data.mouse.usButtonFlags, 
 					(USHORT)RI_MOUSE_RIGHT_BUTTON_DOWN))
 				{
-					mb = mb | MouseButton::Right;
+					mb = mb | mouse_button::right;
 				}
 				if(check_flag(rin->data.mouse.usButtonFlags, 
 					(USHORT)RI_MOUSE_MIDDLE_BUTTON_DOWN))
 				{
-					mb = mb | MouseButton::Middle;
+					mb = mb | mouse_button::middle;
 				}
 				if(check_flag(rin->data.mouse.usButtonFlags, 
 					(USHORT)RI_MOUSE_BUTTON_4_DOWN))
 				{
-					mb = mb | MouseButton::X1;
+					mb = mb | mouse_button::x1;
 				}
 				if(check_flag(rin->data.mouse.usButtonFlags, 
 					(USHORT)RI_MOUSE_BUTTON_5_DOWN))
 				{
-					mb = mb | MouseButton::X2;
+					mb = mb | mouse_button::x2;
 				}
 				
-				Mouse::___SetMouseState(m, mb);
+				mouse::___set_mouse_state(float2(mx, my), mb);
 			}
 		}
 		return 0;
@@ -487,7 +484,8 @@ static LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 	}
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
-int  dx_app::Run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int cliW, int cliH)
+
+int dx_app::run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int cliW, int cliH)
 {
 	WNDCLASS wc;
 	wc.style         = CS_HREDRAW | CS_VREDRAW;
@@ -499,7 +497,7 @@ int  dx_app::Run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int c
 	wc.hCursor       = LoadCursor(0, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
 	wc.lpszMenuName  = 0;
-	wc.lpszClassName = L" dx_appWndClass";
+	wc.lpszClassName = L"DXAppWndClass";
 
 	if(!RegisterClass(&wc))
 	{
@@ -511,9 +509,9 @@ int  dx_app::Run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int c
 	int w = r.right - r.left;
 	int h = r.bottom - r.top;
 
-	auto timer = new BasicTimer();
+	auto ti = new timer();
 
-	HWND wnd = CreateWindow(L" dx_appWndClass", windowTitle, WS_OVERLAPPEDWINDOW, 100,
+	HWND wnd = CreateWindow(L"DXAppWndClass", windowTitle, WS_OVERLAPPEDWINDOW, 100,
 		100, w, h, 0, 0, hInst, 0);
 	if(!wnd)
 	{
@@ -535,10 +533,10 @@ int  dx_app::Run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int c
 		throw exception("Failed to register Raw Input");
 #endif
 	
-	this->Init(wnd);
+	this->init(wnd);
 
 	MSG msg = {0};
-	timer->Reset();
+	ti->reset();
 	while(msg.message != WM_QUIT)
 	{
 		if(PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
@@ -550,10 +548,10 @@ int  dx_app::Run(HINSTANCE hInst, int showCmd, const wchar_t* windowTitle, int c
 		{
 			if(!paused)
 			{
-				timer->Update();
-				this->Update(timer->Total(), timer->Delta());
-				this->Render(timer->Total(), timer->Delta());
-				this->Present();
+				ti->update();
+				this->update(ti->total_time(), ti->delta_time());
+				this->render(ti->total_time(), ti->delta_time());
+				this->present();
 			}
 			else
 			{
