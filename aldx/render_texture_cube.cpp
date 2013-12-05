@@ -35,6 +35,11 @@ void render_texture_cube::om_bind(ComPtr<ID3D11DeviceContext> context, int idx)
 	context->OMSetRenderTargets(1, rtvs[idx].GetAddressOf(), dsv.Get());
 }
 
+void render_texture_cube::push(render_target_stack* rts, int idx)
+{
+	rts->push_render_target(rtvs[idx], dsv, CD3D11_VIEWPORT(0.f, 0.f, _cmsize, _cmsize));
+}
+
 void render_texture_cube::om_unbind(ComPtr<ID3D11DeviceContext> context, int idx)
 {
 	context->RSSetViewports(1, nullptr);

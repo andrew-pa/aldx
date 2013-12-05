@@ -95,7 +95,7 @@ class aldx_demo_app : public dx_app
 	texture2d* img;
 public:
 	aldx_demo_app() : dx_app(8, true), 
-		cam(float3(0, 2.5f, -5), float3(0,0.1f,0), 0.1f, 1000, to_radians(45.f)) {}
+		cam(float3(0, 1.5f, 3), float3(0,0.1f,0), 0.1f, 1000, to_radians(45.f)) {}
 	void load() override
 	{
 		ss = simple_shader(device,
@@ -120,7 +120,6 @@ public:
 	void render(float t, float dt)
 	{
 		tex->push(this);
-		set_render_target();
 		ss.view(cam.view());
 		ss.proj(cam.proj());
 		ss.bind(context);

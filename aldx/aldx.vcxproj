@@ -74,7 +74,7 @@
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="render_texture.cpp" />
-    <ClCompile Include="render_texturecube.cpp" />
+    <ClCompile Include="render_texture_cube.cpp" />
     <ClCompile Include="sampler_state.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="shadow_map.cpp" />

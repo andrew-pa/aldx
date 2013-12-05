@@ -1,6 +1,7 @@
 #pragma once
 #include "helper.h"
 #include "texture_cube.h"
+#include "render_target_stack.h"
 
 //render_texture_cube
 // texture_cube where you can render to each of the faces
@@ -15,6 +16,8 @@ public:
 	render_texture_cube(ComPtr<ID3D11Device> device, uint cubeMapSize);
 	void om_bind(ComPtr<ID3D11DeviceContext> context, int idx);
 	void om_unbind(ComPtr<ID3D11DeviceContext> context, int idx);
+
+	void push(render_target_stack* rts, int idx);
 
 	inline const ComPtr<ID3D11RenderTargetView>& render_target_view(int idx) const 
 	{

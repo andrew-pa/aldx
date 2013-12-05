@@ -70,6 +70,7 @@ public:
 		D3D11_VIEWPORT vp) override
 	{
 		rtexsk.push(render_target(rtv, dsv, vp));
+		set_render_target();
 	}
 	inline void set_render_target() override
 	{
