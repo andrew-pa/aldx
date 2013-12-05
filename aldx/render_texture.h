@@ -1,5 +1,6 @@
 #pragma once
 #include "texture2d.h"
+#include "render_target_stack.h"
 
 //render_texture
 // Texture that can be bound to the OM stage of the pipeline, so you can render to it
@@ -14,11 +15,15 @@ public:
 	render_texture() { }
 	render_texture(ComPtr<ID3D11Device> device, float2 size);
 
+	//decap
 	virtual void om_bind(ComPtr<ID3D11DeviceContext> context);
+	//decap
 	virtual void om_unbind(ComPtr<ID3D11DeviceContext> context);
 
-	propr(ComPtr<ID3D11DepthStencilView>, depthStencilView, { return dsv; })
-	propr(ComPtr<ID3D11RenderTargetView>, renderTargetView, { return rtv; })
+	virtual void push(render_target_stack* rts);
+
+	propr(ComPtr<ID3D11DepthStencilView>, depth_stencil, { return dsv; })
+	propr(ComPtr<ID3D11RenderTargetView>, render_targetv, { return rtv; })
 };
 
 //depth_render_texture
@@ -35,5 +40,7 @@ public:
 	virtual void om_bind(ComPtr<ID3D11DeviceContext> context);
 	virtual void om_unbind(ComPtr<ID3D11DeviceContext> context);
 
-	propr(ComPtr<ID3D11DepthStencilView>, depthStencilView, { return dsv; });
+	virtual void push(render_target_stack* rts);
+
+	propr(ComPtr<ID3D11DepthStencilView>, depth_stencil, { return dsv; });
 };

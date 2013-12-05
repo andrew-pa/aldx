@@ -3,6 +3,9 @@
 #include <dx_app.h>
 #include <render_shader.h>
 #include <constant_buffer.h>
+#include <states.h>
+#include <texture2d.h>
+#include <render_texture.h>
 #include <mesh.h>
 #include <camera.h>
 
@@ -29,13 +32,17 @@ class simple_shader : public render_shader
 
 	constant_buffer<model_depd> model_depd_cb;
 	constant_buffer<camera_depd> camera_depd_cb;
+	sampler_state samp;
+	texture2d* tex;
 public:
 	simple_shader(){}
 	simple_shader(ComPtr<ID3D11Device> device, datablob<byte>* vs_data, datablob<byte>* ps_data,
 		const D3D11_INPUT_ELEMENT_DESC inputLayout[], int inputLayoutLength)
 		: render_shader(device, vs_data, ps_data, inputLayout, inputLayoutLength),
-		model_depd_cb(device, 0, model_depd()), camera_depd_cb(device, 1, camera_depd())
-	{ }
+		model_depd_cb(device, 0, model_depd()), camera_depd_cb(device, 1, camera_depd()),
+		samp(device, 0)
+	{ 
+	}
 	
 	inline void world(const float4x4& m) override
 	{
@@ -53,22 +60,29 @@ public:
 		camera_depd_cb.data().proj = m;
 	}
 
+	proprw(texture2d*, texture, { return tex; })
+
 	inline void bind(ComPtr<ID3D11DeviceContext> context) override
 	{
 		render_shader::bind(context);
 		model_depd_cb.bind(context, ShaderStage::Vertex);
 		camera_depd_cb.bind(context, ShaderStage::Vertex);
+		samp.bind(context, ShaderStage::Pixel);
 	}
 	inline void unbind(ComPtr<ID3D11DeviceContext> context) override
 	{
 		render_shader::unbind(context);
 		model_depd_cb.unbind(context, ShaderStage::Vertex);
 		camera_depd_cb.unbind(context, ShaderStage::Vertex);
+		samp.unbind(context, ShaderStage::Pixel);
+		tex->unbind(context, ShaderStage::Pixel);
+		
 	}
 	inline void update(ComPtr<ID3D11DeviceContext> context) override
 	{
 		model_depd_cb.update(context);
 		camera_depd_cb.update(context);
+		tex->bind(context, ShaderStage::Pixel);
 	}
 };
 
@@ -77,16 +91,22 @@ class aldx_demo_app : public dx_app
 	simple_shader ss;
 	camera cam;
 	mesh* m;
+	render_texture* tex;
+	texture2d* img;
 public:
 	aldx_demo_app() : dx_app(8, true), 
-		cam(float3(0, 2.5f, -5), float3(0,0.1f,0), 0.1f, 1000, XMConvertToRadians(45.f)) {}
+		cam(float3(0, 2.5f, -5), float3(0,0.1f,0), 0.1f, 1000, to_radians(45.f)) {}
 	void load() override
 	{
 		ss = simple_shader(device,
 			read_data_from_package(L"simple_vs.cso"),
 			read_data_from_package(L"simple_ps.cso"), posnormtex_layout, _countof(posnormtex_layout));
 
-		m = mesh::create_sphere(device, 1.f, 32, 32);
+		tex = new render_texture(device, float2(512, 512));
+		ss.texture() = tex;
+		img = new texture2d(device, read_data_from_package(L"img.dds"));
+
+		m = mesh::create_box(device, 1, 1, 1);
 	}
 	void update(float t, float dt) override
 	{
@@ -99,17 +119,31 @@ public:
 	}
 	void render(float t, float dt)
 	{
+		tex->push(this);
+		set_render_target();
+		ss.view(cam.view());
+		ss.proj(cam.proj());
+		ss.bind(context);
+
+		ss.world(XMMatrixRotationRollPitchYaw(t*.3f, t*.7f, t*.4f));
+		ss.texture() = img;
+		ss.update(context);
+		m->draw(context);
+
+		ss.unbind(context);
+		pop_render_target();
+
 		dx_app::render(t, dt);
 		ss.view(cam.view());
 		ss.proj(cam.proj());
 		ss.bind(context);	
 		
-		float4x4 world;
-		XMStoreFloat4x4(&world, XMMatrixRotationRollPitchYaw(t*.2f, t*.5f, t*.3f));
-		ss.world(world);
+		ss.texture() = tex;
+		ss.world(XMMatrixRotationRollPitchYaw(t*.3f, t*.7f, t*.4f));
 		ss.update(context);
 		m->draw(context);
 		
+		tex->unbind(context, ShaderStage::Pixel);
 		ss.unbind(context);
 	}
 };

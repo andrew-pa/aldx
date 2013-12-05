@@ -134,5 +134,8 @@
     <ClInclude Include="DDSTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="render_target_stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

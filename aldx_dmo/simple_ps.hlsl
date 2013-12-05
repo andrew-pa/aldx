@@ -6,8 +6,10 @@ struct psinput
 	float3 normW : NORMAL;
 };
 
+Texture2D tex : register(t0);
+SamplerState smp : register(s0);
+
 float4 main(psinput i) : SV_TARGET
 {
-	float3 c = (float3(0, 1, 0) * max(0, dot(float3(0, 1, 0), i.normW))) + float3(0, .2f, 0);
-	return float4(c,0);
+	return tex.Sample(smp, i.texc);
 }

@@ -3,12 +3,81 @@
 
 using namespace DirectX;
 
-typedef XMFLOAT2 float2;
-typedef XMFLOAT3 float3;
-typedef XMFLOAT4 float4;
-typedef XMFLOAT4X4 float4x4;
 typedef XMVECTOR mvector;
 typedef XMMATRIX matrix;
+//typedef XMFLOAT3 float3;
+struct float2 : public XMFLOAT2
+{
+	float2(float x, float y) : XMFLOAT2(x, y) { }
+	float2() : XMFLOAT2(0, 0) { }
+	float2(const mvector& m)
+	{
+		XMStoreFloat2(this, m);
+	}
+
+	inline operator mvector()
+	{
+		return XMLoadFloat2(this);
+	}
+};
+struct float3 : public XMFLOAT3
+{
+	float3(float x, float y, float z) : XMFLOAT3(x, y, z) { }
+	float3() : XMFLOAT3(0, 0, 0) { }
+	float3(const mvector& m) 
+	{
+		XMStoreFloat3(this, m);
+	}
+
+	inline operator mvector()
+	{
+		return XMLoadFloat3(this);
+	}
+};
+struct float4 : public XMFLOAT4
+{
+	float4(float x, float y, float z, float w) : XMFLOAT4(x, y, z, w) { }
+	float4() : XMFLOAT4(0, 0, 0, 0) { }
+	float4(const mvector& m)
+	{
+		XMStoreFloat4(this, m);
+	}
+
+	inline operator mvector()
+	{
+		return XMLoadFloat4(this);
+	}
+};
+struct float4x4: public XMFLOAT4X4
+{
+	float4x4(float m00, float m01, float m02, float m03,
+	float m10, float m11, float m12, float m13,
+	float m20, float m21, float m22, float m23,
+	float m30, float m31, float m32, float m33) :
+	XMFLOAT4X4( m00, m01, m02, m03,
+				m10, m11, m12, m13,
+				m20, m21, m22, m23,
+				m30, m31, m32, m33){}
+	float4x4() : XMFLOAT4X4() { }
+	float4x4(const matrix& m)
+	{
+		XMStoreFloat4x4(this, m);
+	}
+
+	inline operator matrix()
+	{
+		return XMLoadFloat4x4(this);
+	}
+};
+inline float4x4 identity()
+{
+	return float4x4(1, 0, 0, 0,
+				   0, 1, 0, 0,
+				   0, 0, 1, 0,
+				   0, 0, 0, 1);
+}
+
+#pragma region DXMath hacks
 
 #ifndef loadX
 #define loadX
@@ -37,6 +106,11 @@ typedef XMMATRIX matrix;
 #define return4(r) { float4 ret; store4(ret, r); return ret; }
 #define return4x4(r) { float4x4 ret; store4x4(ret, r); return ret; }
 #endif
+
+inline float to_radians(float degrees)
+{
+	return degrees * (XM_PI / 180.f);
+}
 
 //clamp : clamp a floating point value
 inline float clamp(float x, float max = 1.0f, float min = -1.0f)
@@ -181,3 +255,5 @@ inline float length(float3 a)
 //	load4(a);
 //	return va;
 //}
+
+#pragma endregion

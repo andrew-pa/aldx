@@ -30,6 +30,11 @@ void render_texture::om_bind(ComPtr<ID3D11DeviceContext> context)
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
 }
 
+void render_texture::push(render_target_stack* rts)
+{
+	rts->push_render_target(rtv, dsv, CD3D11_VIEWPORT(0.f, 0.f, _size.x, _size.y));
+}
+
 void render_texture::om_unbind(ComPtr<ID3D11DeviceContext> context)
 {
 	ID3D11RenderTargetView* nullrtvs[] = { nullptr };
@@ -57,6 +62,11 @@ void depth_render_texture::om_bind(ComPtr<ID3D11DeviceContext> context)
 	context->RSSetViewports(1, &vp);
 	ID3D11RenderTargetView* nulltargets[] = { nullptr };
 	context->OMSetRenderTargets(1, nulltargets, dsv.Get());
+}
+
+void depth_render_texture::push(render_target_stack* rts)
+{
+	rts->push_render_target(nullptr, dsv, CD3D11_VIEWPORT(0.f, 0.f, _size.x, _size.y));
 }
 
 void depth_render_texture::om_unbind(ComPtr<ID3D11DeviceContext> context)

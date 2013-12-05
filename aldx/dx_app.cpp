@@ -235,7 +235,7 @@ void  dx_app::create_window_size_depres()
 		renderTargetSize.height
 		);
 
-	render_target_stack = stack<render_target>();
+	rtexsk = stack<render_target>();
 	push_render_target(
 #ifdef MSAA
 		offscreenRenderTargetView, 
@@ -352,11 +352,7 @@ void  dx_app::render(float t, float dt)
 		frameCnt = 0;
 		timElp += 1.0f;
 	}
-	const float clearColor[] = { 0.8f, 0.5f, 0.0f, 1.0f };
-	context->ClearRenderTargetView(current_render_target().render_targetv.Get(), clearColor);
-	context->ClearDepthStencilView(current_render_target().depth_stencil.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-	context->OMSetRenderTargets(1, current_render_target().render_targetv.GetAddressOf(), current_render_target().depth_stencil.Get());
-	context->RSSetViewports(1, &render_target_stack.top().viewport);
+	set_render_target();
 }
 
 //WIN32 stuff

@@ -1,8 +1,7 @@
 #pragma once
 
 #include "helper.h"
-#include <dwrite_1.h>
-#include "input.h"
+#include "render_target_stack.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -31,21 +30,9 @@ typedef HWND window_type;
 #define DP_LOGICALDPI 96.0f
 #endif
 
-struct render_target
-{
-	ComPtr<ID3D11RenderTargetView> render_targetv;
-	ComPtr<ID3D11DepthStencilView> depth_stencil;
-	D3D11_VIEWPORT viewport;
-	render_target(ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv, D3D11_VIEWPORT vp)
-		: render_targetv(rtv), depth_stencil(dsv), viewport(vp)
-	{
-	}
-};
-
-
 //dx_app
 // Handles all DirectX (Direct3D/Direct2D) setup. Subclass to create new applications, then override the pure functions. Also includes FPS measuring and display if D2D is enabled
-class dx_app
+class dx_app : public render_target_stack
 {
 public:
 	dx_app(
@@ -72,16 +59,25 @@ public:
 	virtual void create_d2ddevice_indi_res();
 #endif
 
-	propr(render_target, current_render_target, { return render_target_stack.top(); })
-	inline void pop_render_target() 
+	propr(render_target, current_render_target, override { return rtexsk.top(); })
+	inline void pop_render_target() override
 	{
-		if (render_target_stack.size() == 1) return; //maintain back buffer
-		render_target_stack.pop(); 
+		if (rtexsk.size() == 1) return; //maintain back buffer
+		rtexsk.pop();
+		set_render_target();
 	}
 	inline void push_render_target(ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv, 
-		D3D11_VIEWPORT vp)
+		D3D11_VIEWPORT vp) override
 	{
-		render_target_stack.push(render_target(rtv, dsv, vp));
+		rtexsk.push(render_target(rtv, dsv, vp));
+	}
+	inline void set_render_target() override
+	{
+		const float clearColor[] = { 0.8f, 0.5f, (float)rtexsk.size() / 5.f, 1.0f };
+		context->ClearRenderTargetView(current_render_target().render_targetv.Get(), clearColor);
+		context->ClearDepthStencilView(current_render_target().depth_stencil.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+		context->OMSetRenderTargets(1, current_render_target().render_targetv.GetAddressOf(), current_render_target().depth_stencil.Get());
+		context->RSSetViewports(1, &rtexsk.top().viewport);
 	}
 protected:
 	ComPtr<ID3D11Device1> device;
@@ -123,7 +119,7 @@ protected:
 	bool vsync;
 
 private:
-	stack<render_target> render_target_stack;
+	stack<render_target> rtexsk;
 
 	void init(window_type win);
 	inline float conv_dips_pixels(float dips)
