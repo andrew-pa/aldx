@@ -23,7 +23,7 @@ data_buffer<data_type>::data_buffer(ComPtr<ID3D11Device> device, vector<data_typ
 	srvd.BufferEx.FirstElement = 0;
 	srvd.BufferEx.Flags = 0;
 	srvd.BufferEx.NumElements = ddata.size();
-	device->CreateShaderResourceView(_buffer.Get(), &srvd, srv.GetAddressOf());
+	chr(device->CreateShaderResourceView(_buffer.Get(), &srvd, srv.GetAddressOf()));
 }
 
 template <typename data_type>
@@ -47,7 +47,7 @@ data_buffer<data_type>::data_buffer(ComPtr<ID3D11Device> device, data_type* data
 	srvd.BufferEx.FirstElement = 0;
 	srvd.BufferEx.Flags = 0;
 	srvd.BufferEx.NumElements = data_length;
-	device->CreateShaderResourceView(_buffer.Get(), &srvd, srv.GetAddressOf());
+	chr(device->CreateShaderResourceView(_buffer.Get(), &srvd, srv.GetAddressOf()));
 }
 
 
@@ -108,7 +108,7 @@ template <typename data_type>
 void data_buffer<data_type>::update(ComPtr<ID3D11DeviceContext> context)
 {
 	D3D11_MAPPED_SUBRESOURCE msr;
-	context->Map(_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+	chr(context->Map(_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr));
 	memcpy(msr.pData, &_data[0], _data.size()*sizeof(data_type));
 	context->Unmap(_buffer.Get(), 0);
 }
