@@ -68,14 +68,16 @@ struct float4x4: public XMFLOAT4X4
 	{
 		return XMLoadFloat4x4(this);
 	}
+	
+	static inline float4x4 identity()
+	{
+		return float4x4(1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1);
+	}
 };
-inline float4x4 identity()
-{
-	return float4x4(1, 0, 0, 0,
-				   0, 1, 0, 0,
-				   0, 0, 1, 0,
-				   0, 0, 0, 1);
-}
+
 
 #pragma region DXMath hacks
 

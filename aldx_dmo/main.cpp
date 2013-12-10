@@ -91,11 +91,12 @@ class aldx_demo_app : public dx_app
 	simple_shader ss;
 	camera cam;
 	mesh* m;
+	mesh* g;
 	render_texture* tex;
 	texture2d* img;
 public:
 	aldx_demo_app() : dx_app(8, true), 
-		cam(float3(0, 1.5f, 3), float3(0,0.1f,0), 0.1f, 1000, to_radians(45.f)) {}
+		cam(float3(0, 3.f, 6), float3(0,0.1f,0), 0.1f, 1000, to_radians(45.f)) {}
 	void load() override
 	{
 		ss = simple_shader(device,
@@ -107,6 +108,7 @@ public:
 		img = new texture2d(device, read_data_from_package(L"img.dds"));
 
 		m = mesh::create_box(device, 1, 1, 1);
+		g = mesh::create_grid(device, 16, 16, 4, 4, "ground");
 	}
 	void update(float t, float dt) override
 	{
@@ -117,33 +119,36 @@ public:
 		}
 		cam.update_view();
 	}
-	void render(float t, float dt)
+
+	void render_scene(float t, float dt, const float4x4& view, const float4x4& proj)
 	{
-		tex->push(this);
 		ss.view(cam.view());
 		ss.proj(cam.proj());
 		ss.bind(context);
 
-		ss.world(XMMatrixRotationRollPitchYaw(t*.3f, t*.7f, t*.4f));
-		ss.texture() = img;
+		ss.texture() = tex;
+		ss.world(XMMatrixRotationRollPitchYaw(t*.3f, t*.7f, t*.4f) *
+				 XMMatrixTranslation(0, 1, 0));
 		ss.update(context);
 		m->draw(context);
 
+		ss.texture() = img;
+		ss.world(float4x4::identity());
+		ss.update(context);
+		g->draw(context);
+
+		tex->unbind(context, ShaderStage::Pixel);
 		ss.unbind(context);
+	}
+
+	void render(float t, float dt)
+	{
+		tex->push(this);
+		render_scene(t, dt, cam.view(), cam.proj());
 		pop_render_target();
 
 		dx_app::render(t, dt);
-		ss.view(cam.view());
-		ss.proj(cam.proj());
-		ss.bind(context);	
-		
-		ss.texture() = tex;
-		ss.world(XMMatrixRotationRollPitchYaw(t*.3f, t*.7f, t*.4f));
-		ss.update(context);
-		m->draw(context);
-		
-		tex->unbind(context, ShaderStage::Pixel);
-		ss.unbind(context);
+		render_scene(t, dt, cam.view(), cam.proj());
 	}
 };
 
