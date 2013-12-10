@@ -65,24 +65,24 @@ public:
 	inline void bind(ComPtr<ID3D11DeviceContext> context) override
 	{
 		render_shader::bind(context);
-		model_depd_cb.bind(context, ShaderStage::Vertex);
-		camera_depd_cb.bind(context, ShaderStage::Vertex);
-		samp.bind(context, ShaderStage::Pixel);
+		model_depd_cb.bind(context, shader_stage::Vertex);
+		camera_depd_cb.bind(context, shader_stage::Vertex);
+		samp.bind(context, shader_stage::Pixel);
 	}
 	inline void unbind(ComPtr<ID3D11DeviceContext> context) override
 	{
 		render_shader::unbind(context);
-		model_depd_cb.unbind(context, ShaderStage::Vertex);
-		camera_depd_cb.unbind(context, ShaderStage::Vertex);
-		samp.unbind(context, ShaderStage::Pixel);
-		tex->unbind(context, ShaderStage::Pixel);
+		model_depd_cb.unbind(context, shader_stage::Vertex);
+		camera_depd_cb.unbind(context, shader_stage::Vertex);
+		samp.unbind(context, shader_stage::Pixel);
+		tex->unbind(context, shader_stage::Pixel);
 		
 	}
 	inline void update(ComPtr<ID3D11DeviceContext> context) override
 	{
 		model_depd_cb.update(context);
 		camera_depd_cb.update(context);
-		tex->bind(context, ShaderStage::Pixel);
+		tex->bind(context, shader_stage::Pixel);
 	}
 };
 
@@ -137,7 +137,7 @@ public:
 		ss.update(context);
 		g->draw(context);
 
-		tex->unbind(context, ShaderStage::Pixel);
+		tex->unbind(context, shader_stage::Pixel);
 		ss.unbind(context);
 	}
 

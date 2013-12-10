@@ -52,6 +52,6 @@ public:
 		res.As(&texd);
 	}
 
-	virtual void texture2d::bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int slot = 0);
-	virtual void texture2d::unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int slot = 0);
+	virtual void texture2d::bind(ComPtr<ID3D11DeviceContext> context, shader_stage stage, int slot = 0);
+	virtual void texture2d::unbind(ComPtr<ID3D11DeviceContext> context, shader_stage stage, int slot = 0);
 };

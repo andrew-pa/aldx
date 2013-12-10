@@ -21,52 +21,52 @@ sampler_state::sampler_state(ComPtr<ID3D11Device> device, int slotidx, D3D11_FIL
 	chr(device->CreateSamplerState(&smd, sampl.GetAddressOf()));
 }
 
-void sampler_state::bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
+void sampler_state::bind(ComPtr<ID3D11DeviceContext> context, shader_stage stage)
 {
 	switch (stage)
 	{
-	case ShaderStage::Vertex:
+	case shader_stage::Vertex:
 		context->VSSetSamplers(_slot, 1, sampl.GetAddressOf());
 		break;
-	case ShaderStage::Pixel:
+	case shader_stage::Pixel:
 		context->PSSetSamplers(_slot, 1, sampl.GetAddressOf());
 		break;
-	case ShaderStage::Geometry:
+	case shader_stage::Geometry:
 		context->GSSetSamplers(_slot, 1, sampl.GetAddressOf());
 		break;
-	case ShaderStage::Domain:
+	case shader_stage::Domain:
 		context->DSSetSamplers(_slot, 1, sampl.GetAddressOf());
 		break;
-	case ShaderStage::Hull:
+	case shader_stage::Hull:
 		context->HSSetSamplers(_slot, 1, sampl.GetAddressOf());
 		break;
-	case ShaderStage::Compute:
+	case shader_stage::Compute:
 		context->CSSetSamplers(_slot, 1, sampl.GetAddressOf());
 		break;
 	}
 }
 
-void sampler_state::unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
+void sampler_state::unbind(ComPtr<ID3D11DeviceContext> context, shader_stage stage)
 {
 	ID3D11SamplerState* nullsmps[] = { nullptr };
 	switch (stage)
 	{
-	case ShaderStage::Vertex:
+	case shader_stage::Vertex:
 		context->VSSetSamplers(_slot, 1, nullsmps);
 		break;
-	case ShaderStage::Pixel:
+	case shader_stage::Pixel:
 		context->PSSetSamplers(_slot, 1, nullsmps);
 		break;
-	case ShaderStage::Geometry:
+	case shader_stage::Geometry:
 		context->GSSetSamplers(_slot, 1, nullsmps);
 		break;
-	case ShaderStage::Domain:
+	case shader_stage::Domain:
 		context->DSSetSamplers(_slot, 1, nullsmps);
 		break;
-	case ShaderStage::Hull:
+	case shader_stage::Hull:
 		context->HSSetSamplers(_slot, 1, nullsmps);
 		break;
-	case ShaderStage::Compute:
+	case shader_stage::Compute:
 		context->CSSetSamplers(_slot, 1, nullsmps);
 		break;
 	}

@@ -97,9 +97,9 @@ inline bool check_flag(E v, E c)
 	return (v & c) == c; 
 }
 
-//ShaderStage
+//shader_stage
 // Enum that contains all the different shader stages
-enum class ShaderStage
+enum class shader_stage
 {
 	Vertex, Pixel, Geometry, Domain, Hull, Compute,
 };

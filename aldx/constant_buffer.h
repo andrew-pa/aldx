@@ -26,104 +26,104 @@ public:
 	}
 
 	//Bind to a particular shader stage
-	inline void bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
+	inline void bind(ComPtr<ID3D11DeviceContext> context, shader_stage stage)
 	{
 		switch (stage)
 		{
-		case ShaderStage::Vertex:
+		case shader_stage::Vertex:
 			context->VSSetConstantBuffers(_slot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Pixel:
+		case shader_stage::Pixel:
 			context->PSSetConstantBuffers(_slot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Geometry:
+		case shader_stage::Geometry:
 			context->GSSetConstantBuffers(_slot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Domain:
+		case shader_stage::Domain:
 			context->DSSetConstantBuffers(_slot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Hull:
+		case shader_stage::Hull:
 			context->HSSetConstantBuffers(_slot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Compute:
+		case shader_stage::Compute:
 			context->CSGetConstantBuffers(_slot, 1, _buffer.GetAddressOf());
 			break;
 		}
 	}	
 	//Bind to a particular shader stage and slot
-	inline void bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int overrideSlot)
+	inline void bind(ComPtr<ID3D11DeviceContext> context, shader_stage stage, int overrideSlot)
 	{
 		switch (stage)
 		{
-		case ShaderStage::Vertex:
+		case shader_stage::Vertex:
 			context->VSSetConstantBuffers(overrideSlot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Pixel:
+		case shader_stage::Pixel:
 			context->PSSetConstantBuffers(overrideSlot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Geometry:
+		case shader_stage::Geometry:
 			context->GSSetConstantBuffers(overrideSlot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Domain:
+		case shader_stage::Domain:
 			context->DSSetConstantBuffers(overrideSlot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Hull:
+		case shader_stage::Hull:
 			context->HSSetConstantBuffers(overrideSlot, 1, _buffer.GetAddressOf());
 			break;
-		case ShaderStage::Compute:
+		case shader_stage::Compute:
 			context->CSSetConstantBuffers(overrideSlot, 1, _buffer.GetAddressOf());
 			break;
 		}
 	}	
 
 	//Unbind from a particular shader stage
-	inline void unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage)
+	inline void unbind(ComPtr<ID3D11DeviceContext> context, shader_stage stage)
 	{
 		ID3D11Buffer* nullbuf[] = {nullptr};
 		switch (stage)
 		{
-		case ShaderStage::Vertex:
+		case shader_stage::Vertex:
 			context->VSSetConstantBuffers(_slot, 1, nullbuf);
 			break;
-		case ShaderStage::Pixel:
+		case shader_stage::Pixel:
 			context->PSSetConstantBuffers(_slot, 1, nullbuf);
 			break;
-		case ShaderStage::Geometry:
+		case shader_stage::Geometry:
 			context->GSSetConstantBuffers(_slot, 1, nullbuf);
 			break;
-		case ShaderStage::Domain:
+		case shader_stage::Domain:
 			context->DSSetConstantBuffers(_slot, 1, nullbuf);
 			break;
-		case ShaderStage::Hull:
+		case shader_stage::Hull:
 			context->HSSetConstantBuffers(_slot, 1, nullbuf);
 			break;
-		case ShaderStage::Compute:
+		case shader_stage::Compute:
 			context->CSSetConstantBuffers(_slot, 1, nullbuf);
 			break;
 		}
 	}	
 	//Unbind from a particular shader stage and slot
-	inline void unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage, int overrideSlot)
+	inline void unbind(ComPtr<ID3D11DeviceContext> context, shader_stage stage, int overrideSlot)
 	{
 		ID3D11Buffer* nullbuf[] = {nullptr};
 		switch (stage)
 		{
-		case ShaderStage::Vertex:
+		case shader_stage::Vertex:
 			context->VSSetConstantBuffers(overrideSlot, 1, nullbuf);
 			break;
-		case ShaderStage::Pixel:
+		case shader_stage::Pixel:
 			context->PSSetConstantBuffers(overrideSlot, 1, nullbuf);
 			break;
-		case ShaderStage::Geometry:
+		case shader_stage::Geometry:
 			context->GSSetConstantBuffers(overrideSlot, 1, nullbuf);
 			break;
-		case ShaderStage::Domain:
+		case shader_stage::Domain:
 			context->DSSetConstantBuffers(overrideSlot, 1, nullbuf);
 			break;
-		case ShaderStage::Hull:
+		case shader_stage::Hull:
 			context->HSSetConstantBuffers(overrideSlot, 1, nullbuf);
 			break;
-		case ShaderStage::Compute:
+		case shader_stage::Compute:
 			context->CSSetConstantBuffers(overrideSlot, 1, nullbuf);
 			break;
 		}

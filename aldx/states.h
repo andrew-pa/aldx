@@ -54,6 +54,6 @@ public:
 		uint maxAniso = 16, float4 borderColor = float4(.5f, .5f, .5f, .5f),
 		D3D11_COMPARISON_FUNC compareFunc = D3D11_COMPARISON_NEVER);
 
-	void bind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage);
-	void unbind(ComPtr<ID3D11DeviceContext> context, ShaderStage stage);
+	void bind(ComPtr<ID3D11DeviceContext> context, shader_stage stage);
+	void unbind(ComPtr<ID3D11DeviceContext> context, shader_stage stage);
 };
