@@ -8,6 +8,7 @@
 #include <render_texture.h>
 #include <mesh.h>
 #include <camera.h>
+#include <data_buffer.h>
 
 static const D3D11_INPUT_ELEMENT_DESC posnormtex_layout[] =
 {
