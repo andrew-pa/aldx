@@ -153,60 +153,69 @@ namespace aldx
 		return float4(b.x, b.y, b.z, w);
 	}
 
-	inline float3 operator+(float3 a, float3 b)
+	//inline float3 operator+(float3 a, float3 b)
+	//{
+	//	load3(a); load3(b);
+	//	float3 ret; store3(ret, XMVectorAdd(va, vb)); return ret;
+	//}
+	//inline float3 operator*(float3 a, float3 b)
+	//{
+	//	load3(a); load3(b);
+	//	float3 ret; store3(ret, va*vb); return ret;
+	//}
+	//inline float3 operator-(float3 a, float3 b)
+	//{
+	//	load3(a); load3(b);
+	//	float3 ret; store3(ret, XMVectorAdd(va, vb)); return ret;
+	//}
+	//inline float4 operator+(float4 a, float4 b)
+	//{
+	//	load4(a); load4(b);
+	//	float4 ret; store4(ret, XMVectorSubtract(va, vb)); return ret;
+	//}
+	//inline float4 operator-(float4 a, float4 b)
+	//{
+	//	load4(a); load4(b);
+	//	float4 ret; store4(ret, XMVectorSubtract(va, vb)); return ret;
+	//}
+	//inline float3 operator*(float3 a, float b)
+	//{
+	//	load3(a);
+	//	return3(XMVectorScale(va, b));
+	//}
+	//inline float3 operator*(float a, float3 b)
+	//{
+	//	load3(b);
+	//	return3(XMVectorScale(vb, a));
+	//}
+	//inline float4 operator*(float4 a, float b)
+	//{
+	//	load4(a);
+	//	return4(XMVectorScale(va, b));
+	//}
+	//inline float4 operator*(float a, float4 b)
+	//{
+	//	load4(b);
+	//	return4(XMVectorScale(vb, a));
+	//}
+	//inline float3 operator-(float3 a)
+	//{
+	//	load3(a);
+	//	return3(XMVectorNegate(va));
+	//}
+	//inline float4 operator-(float4 a)
+	//{
+	//	load4(a);
+	//	return4(XMVectorNegate(va));
+	//}
+
+	inline XMVECTOR operator*(FXMVECTOR a, float b)
 	{
-		load3(a); load3(b);
-		float3 ret; store3(ret, XMVectorAdd(va, vb)); return ret;
+		return XMVectorScale(a, b);
 	}
-	inline float3 operator*(float3 a, float3 b)
+	inline XMVECTOR operator*(float b, FXMVECTOR a)
 	{
-		load3(a); load3(b);
-		float3 ret; store3(ret, va*vb); return ret;
-	}
-	inline float3 operator-(float3 a, float3 b)
-	{
-		load3(a); load3(b);
-		float3 ret; store3(ret, XMVectorAdd(va, vb)); return ret;
-	}
-	inline float4 operator+(float4 a, float4 b)
-	{
-		load4(a); load4(b);
-		float4 ret; store4(ret, XMVectorSubtract(va, vb)); return ret;
-	}
-	inline float4 operator-(float4 a, float4 b)
-	{
-		load4(a); load4(b);
-		float4 ret; store4(ret, XMVectorSubtract(va, vb)); return ret;
-	}
-	inline float3 operator*(float3 a, float b)
-	{
-		load3(a);
-		return3(XMVectorScale(va, b));
-	}
-	inline float3 operator*(float a, float3 b)
-	{
-		load3(b);
-		return3(XMVectorScale(vb, a));
-	}
-	inline float4 operator*(float4 a, float b)
-	{
-		load4(a);
-		return4(XMVectorScale(va, b));
-	}
-	inline float4 operator*(float a, float4 b)
-	{
-		load4(b);
-		return4(XMVectorScale(vb, a));
-	}
-	inline float3 operator-(float3 a)
-	{
-		load3(a);
-		return3(XMVectorNegate(va));
-	}
-	inline float4 operator-(float4 a)
-	{
-		load4(a);
-		return4(XMVectorNegate(va));
+		return XMVectorScale(a, b);
 	}
 
 

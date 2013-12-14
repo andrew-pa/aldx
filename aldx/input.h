@@ -55,12 +55,12 @@ namespace aldx
 	public:
 		inline static bool key_down(uint32 key)
 		{
-			return ::__IsKeyDown(key);
+			return aldx::__IsKeyDown(key);
 		}
 
 		inline static bool key_up(uint32 key)
 		{
-			return !::__IsKeyDown(key);
+			return !aldx::__IsKeyDown(key);
 		}
 	};
 

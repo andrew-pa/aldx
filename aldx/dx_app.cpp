@@ -360,9 +360,7 @@ namespace aldx
 	//WIN32 stuff
 	//Includes a bunch of bad weird hacks including globals and a static app var
 #ifdef WIN32
-#include "timer.h"
 #include <windowsx.h>
-#include "input.h"
 	static bool paused = false;
 	static bool resizeing = false;
 	static  dx_app* app = nullptr;

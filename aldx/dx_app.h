@@ -2,6 +2,8 @@
 
 #include "helper.h"
 #include "render_target_stack.h"
+#include "input.h"
+#include "timer.h"
 
 using Microsoft::WRL::ComPtr;
 
