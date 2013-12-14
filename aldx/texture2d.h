@@ -50,7 +50,7 @@ namespace aldx
 		texture2d(ComPtr<ID3D11Device> device, datablob<byte>* ddsData)
 		{
 			ComPtr<ID3D11Resource> res;
-			CreateDDSTextureFromMemory(device.Get(), ddsData->data, ddsData->length, res.GetAddressOf(), srv.GetAddressOf());
+			dds_loader::CreateDDSTextureFromMemory(device.Get(), ddsData->data, ddsData->length, res.GetAddressOf(), srv.GetAddressOf());
 			res.As(&texd);
 		}
 
