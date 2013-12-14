@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include <iostream>
 
 using namespace DirectX;
 
@@ -20,6 +21,12 @@ struct float2 : public XMFLOAT2
 		return XMLoadFloat2(this);
 	}
 };
+inline std::ostream& operator <<(std::ostream& os, const float2& v)
+{
+	os << "(" << v.x << ", " << v.y << ")";
+	return os;
+}
+
 struct float3 : public XMFLOAT3
 {
 	float3(float x, float y, float z) : XMFLOAT3(x, y, z) { }
@@ -34,6 +41,12 @@ struct float3 : public XMFLOAT3
 		return XMLoadFloat3(this);
 	}
 };
+inline std::ostream& operator <<(std::ostream& os, const float3& v)
+{
+	os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return os;
+}
+
 struct float4 : public XMFLOAT4
 {
 	float4(float x, float y, float z, float w) : XMFLOAT4(x, y, z, w) { }
@@ -48,6 +61,12 @@ struct float4 : public XMFLOAT4
 		return XMLoadFloat4(this);
 	}
 };
+inline std::ostream& operator <<(std::ostream& os, const float4& v)
+{
+	os << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
+	return os;
+}
+
 struct float4x4: public XMFLOAT4X4
 {
 	float4x4(float m00, float m01, float m02, float m03,

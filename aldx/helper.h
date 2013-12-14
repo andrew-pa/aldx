@@ -130,7 +130,7 @@ struct datablob
 #define _DX_READ_DATA
 	//Read in the data contained in filename, put it in to a datablob
 	inline datablob<byte>* read_data(
-	_In_ const wchar_t* filename
+		const wstring& filename	//_In_ const wchar_t* filename
 	)
 	{
 		CREATEFILE2_EXTENDED_PARAMETERS extendedParams = {0};
@@ -141,7 +141,7 @@ struct datablob
 		extendedParams.lpSecurityAttributes = nullptr;
 		extendedParams.hTemplateFile = nullptr;
 	
-		HANDLE file = CreateFile2(filename, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, &extendedParams);
+		HANDLE file = CreateFile2(filename.c_str(), GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, &extendedParams);
 
 		if (file == INVALID_HANDLE_VALUE)
 		{
@@ -184,7 +184,7 @@ struct datablob
 	}
 
 	//Wrapper for read_data, but adds the executable path on to the file name
-	inline datablob<byte>* read_data_from_package(_In_ const wchar_t* filename)
+	inline datablob<byte>* read_data_from_package(_In_ const wstring& filename)
 	{
 		static std::wstring fpath = L"";
 		if(fpath.length() == 0)
@@ -203,9 +203,8 @@ struct datablob
 			}
 			fpath = fpath.substr(0, pl);
 		}
-		std::wstring fname(filename);
 		std::wstring fpn = fpath;
-		fpn += fname;
+		fpn += filename;
 		return read_data(fpn.data());
 	}
 #endif
