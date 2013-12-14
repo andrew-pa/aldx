@@ -3,64 +3,66 @@
 #include "shader.h"
 #include "texture2d.h"
 
-////decap !!
-//struct directional_light
-//{
-//	float4 direction;
-//	float4 diffuse;
-//	float4 specular;
-//
-//	directional_light() { }
-//	directional_light(float4 d, float4 dc, float4 sc)
-//		: direction(d), diffuse(dc), specular(sc)
-//	{
-//	}
-//};
-//
-////decap !!
-//struct point_light
-//{
-//	float4 position;
-//	float4 diffuse;
-//	float4 specular;
-//
-//	point_light() { }
-//	point_light(float4 d, float4 dc, float4 sc)
-//		: position(d), diffuse(dc), specular(sc)
-//	{
-//	}
-//};
-
-//material
-// Simple Direct Lighting material
-struct material
+namespace aldx
 {
-	float4 diffuse, specular, ambient;
-	material()
-		: diffuse(.7f, .7f, .7f, 1), specular(1, 1, 1, 0), ambient(.2f, .2f, .2f, 1)
-	{ }
-	material(float4 d, float4 s, float4 a)
-		: diffuse(d), specular(s), ambient(a)
+	////decap !!
+	//struct directional_light
+	//{
+	//	float4 direction;
+	//	float4 diffuse;
+	//	float4 specular;
+	//
+	//	directional_light() { }
+	//	directional_light(float4 d, float4 dc, float4 sc)
+	//		: direction(d), diffuse(dc), specular(sc)
+	//	{
+	//	}
+	//};
+	//
+	////decap !!
+	//struct point_light
+	//{
+	//	float4 position;
+	//	float4 diffuse;
+	//	float4 specular;
+	//
+	//	point_light() { }
+	//	point_light(float4 d, float4 dc, float4 sc)
+	//		: position(d), diffuse(dc), specular(sc)
+	//	{
+	//	}
+	//};
+
+	//material
+	// Simple Direct Lighting material
+	struct material
 	{
-	}
-};
+		float4 diffuse, specular, ambient;
+		material()
+			: diffuse(.7f, .7f, .7f, 1), specular(1, 1, 1, 0), ambient(.2f, .2f, .2f, 1)
+		{ }
+		material(float4 d, float4 s, float4 a)
+			: diffuse(d), specular(s), ambient(a)
+		{
+		}
+	};
 
-//IRenderShader
-// Interface for all shaders involved with rendering. Effectively dictated bygame_object
-class render_shader : public shader
-{
-public:
-	render_shader() { }
-	render_shader(ComPtr<ID3D11Device> device, datablob<byte>* vs_data, datablob<byte>* ps_data,
-		const D3D11_INPUT_ELEMENT_DESC inputLayout[], int inputLayoutLength)
-		: shader(device, vs_data, ps_data, inputLayout, inputLayoutLength) { }
-	virtual void world(const float4x4& m) = 0;
-	virtual void view(const float4x4& m) = 0;
-	virtual void proj(const float4x4& m) = 0;
-	virtual void set_texture(texture2d* tex) { }
-	virtual void set_material(const material& mat) { };
-};
-
+	//IRenderShader
+	// Interface for all shaders involved with rendering. Effectively dictated bygame_object
+	class render_shader : public shader
+	{
+	public:
+		render_shader() { }
+		render_shader(ComPtr<ID3D11Device> device, datablob<byte>* vs_data, datablob<byte>* ps_data,
+			const D3D11_INPUT_ELEMENT_DESC inputLayout[], int inputLayoutLength)
+			: shader(device, vs_data, ps_data, inputLayout, inputLayoutLength) { }
+		virtual void world(const float4x4& m) = 0;
+		virtual void view(const float4x4& m) = 0;
+		virtual void proj(const float4x4& m) = 0;
+		virtual void set_texture(texture2d* tex) { }
+		virtual void set_material(const material& mat) { };
+	};
+}
 
 ////no longer supported - see negdx's phongshader
 ////!!DECAPRECATED!! DO NOT USE - DOESN'T HAVE UNBIND, NEVER UPDATED

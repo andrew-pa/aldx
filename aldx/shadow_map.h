@@ -3,32 +3,33 @@
 #include "render_shader.h"
 #include "render_texture.h"
 
-//shadow_map
-// depth_render_texture with special RasterizerState (using DepthBias) and a Light Projection
-class shadow_map : public depth_render_texture
+namespace aldx
 {
-	ComPtr<ID3D11RasterizerState> shadowmap_rsstate;
+	//shadow_map
+	// depth_render_texture with special RasterizerState (using DepthBias) and a Light Projection
+	class shadow_map : public depth_render_texture
+	{
+		ComPtr<ID3D11RasterizerState> shadowmap_rsstate;
 
-	float4x4 _shadowViewProjTex;
-	float4x4 _shadowView;
-	float4x4 _shadowProj;
-public:
-	shadow_map() { }
+		float4x4 _shadowViewProjTex;
+		float4x4 _shadowView;
+		float4x4 _shadowProj;
+	public:
+		shadow_map() { }
 
-	shadow_map(ComPtr<ID3D11Device> device, float2 size, int depthBias);
+		shadow_map(ComPtr<ID3D11Device> device, float2 size, int depthBias);
 
-	//Update the ProjTex, Proj, and View, matrices for a particular directional light ("light" is the direction)
-	void update_proj(float4 light, float radius, float lightfov);
+		//Update the ProjTex, Proj, and View, matrices for a particular directional light ("light" is the direction)
+		void update_proj(float4 light, float radius, float lightfov);
 
-	virtual void om_bind(ComPtr<ID3D11DeviceContext> context);
-	virtual void om_unbind(ComPtr<ID3D11DeviceContext> context);
-	const float4x4& shadow_proj_tex() const { return _shadowViewProjTex; }
-	const float4x4& shadow_proj() const { return _shadowProj; }
-	const float4x4& shadow_view() const { return _shadowView; }
+		virtual void om_bind(ComPtr<ID3D11DeviceContext> context);
+		virtual void om_unbind(ComPtr<ID3D11DeviceContext> context);
+		const float4x4& shadow_proj_tex() const { return _shadowViewProjTex; }
+		const float4x4& shadow_proj() const { return _shadowProj; }
+		const float4x4& shadow_view() const { return _shadowView; }
 
-};
-
-
+	};
+}
 
 
 

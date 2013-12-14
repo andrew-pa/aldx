@@ -25,6 +25,11 @@
 
 using namespace Microsoft::WRL;
 
+namespace aldx 
+{
+	namespace dds_loader
+	{
+
 //--------------------------------------------------------------------------------------
 // Macros
 //--------------------------------------------------------------------------------------
@@ -1131,4 +1136,6 @@ void CreateDDSTextureFromMemory(
 	ptrdiff_t offset = sizeof(uint32) + sizeof(DDS_HEADER) + (bDXT10Header ? sizeof(DDS_HEADER_DXT10) : 0);
 
 	CreateTextureFromDDS(d3dDevice, header, ddsData + offset, ddsDataSize - offset, texture, textureView, maxsize);
+}
+}
 }

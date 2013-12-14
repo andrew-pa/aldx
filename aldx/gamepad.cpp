@@ -1,8 +1,10 @@
 
 #include "Gamepad.h"
 
-
-gamepad::gamepad(DWORD uzrIdx)
-	: usrIdx(uzrIdx)
+namespace aldx
 {
+	gamepad::gamepad(DWORD uzrIdx)
+		: usrIdx(uzrIdx)
+	{
+	}
 }

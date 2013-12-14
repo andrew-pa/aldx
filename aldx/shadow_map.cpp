@@ -1,43 +1,45 @@
 
 #include "shadow_map.h"
 
-shadow_map::shadow_map(ComPtr<ID3D11Device> device, float2 size, int depthBias)
-	: depth_render_texture(device, size)
+namespace aldx
 {
-	CD3D11_RASTERIZER_DESC rsd(D3D11_FILL_SOLID, D3D11_CULL_BACK, FALSE, 
-		depthBias, 0.0f, 1.0f, TRUE, FALSE, FALSE, FALSE);
-	chr(device->CreateRasterizerState(&rsd, shadowmap_rsstate.GetAddressOf()));
-}
+	shadow_map::shadow_map(ComPtr<ID3D11Device> device, float2 size, int depthBias)
+		: depth_render_texture(device, size)
+	{
+		CD3D11_RASTERIZER_DESC rsd(D3D11_FILL_SOLID, D3D11_CULL_BACK, FALSE,
+			depthBias, 0.0f, 1.0f, TRUE, FALSE, FALSE, FALSE);
+		chr(device->CreateRasterizerState(&rsd, shadowmap_rsstate.GetAddressOf()));
+	}
 
-void shadow_map::update_proj(float4 lightDirection, float radius, float lightfov)
-{
-	static const XMMATRIX T(
-		0.5f, 0.0f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.0f, 1.0f);
-	auto p = XMMatrixPerspectiveFovLH(lightfov, _size.x/_size.y, 0.1f, 1000.f);
-	XMVECTOR eye = XMLoadFloat4(&lightDirection);
-	eye = radius * eye;
-	auto v = XMMatrixLookAtLH(eye, XMVectorSet(0,0,0,1), XMVectorSet(0, 1, 0, 1));
-	XMStoreFloat4x4(&_shadowProj, p);
-	XMStoreFloat4x4(&_shadowView, v);
-	XMStoreFloat4x4(&_shadowViewProjTex, v*p*T);
-}
+	void shadow_map::update_proj(float4 lightDirection, float radius, float lightfov)
+	{
+		static const XMMATRIX T(
+			0.5f, 0.0f, 0.0f, 0.0f,
+			0.0f, -0.5f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, 0.0f, 1.0f);
+		auto p = XMMatrixPerspectiveFovLH(lightfov, _size.x / _size.y, 0.1f, 1000.f);
+		XMVECTOR eye = XMLoadFloat4(&lightDirection);
+		eye = radius * eye;
+		auto v = XMMatrixLookAtLH(eye, XMVectorSet(0, 0, 0, 1), XMVectorSet(0, 1, 0, 1));
+		XMStoreFloat4x4(&_shadowProj, p);
+		XMStoreFloat4x4(&_shadowView, v);
+		XMStoreFloat4x4(&_shadowViewProjTex, v*p*T);
+	}
 
-void shadow_map::om_bind(ComPtr<ID3D11DeviceContext> context)
-{
-	context->ClearDepthStencilView(dsv.Get(), D3D11_CLEAR_DEPTH, 1.f, 0);
-	depth_render_texture::om_bind(context);
-	context->RSSetState(shadowmap_rsstate.Get());
-}
+	void shadow_map::om_bind(ComPtr<ID3D11DeviceContext> context)
+	{
+		context->ClearDepthStencilView(dsv.Get(), D3D11_CLEAR_DEPTH, 1.f, 0);
+		depth_render_texture::om_bind(context);
+		context->RSSetState(shadowmap_rsstate.Get());
+	}
 
-void shadow_map::om_unbind(ComPtr<ID3D11DeviceContext> context)
-{
-	depth_render_texture::om_unbind(context);
-	context->RSSetState(nullptr);
+	void shadow_map::om_unbind(ComPtr<ID3D11DeviceContext> context)
+	{
+		depth_render_texture::om_unbind(context);
+		context->RSSetState(nullptr);
+	}
 }
-
 //namespace Oldshadow_map
 //{
 //shadow_map::shadow_map(ComPtr<ID3D11Device> device, float mapH, float mapW, float depthB, float depthBClamp, float DBSlopeScale,
