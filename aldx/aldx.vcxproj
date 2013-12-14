@@ -101,7 +101,6 @@
     <ClInclude Include="render_shader.h" />
     <ClInclude Include="render_texture.h" />
     <ClInclude Include="render_texture_cube.h" />
-    <ClInclude Include="sampler_state.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="shadow_map.h" />
     <ClInclude Include="states.h" />

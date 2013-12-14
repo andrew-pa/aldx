@@ -104,9 +104,6 @@
     <ClInclude Include="render_texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sampler_state.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
