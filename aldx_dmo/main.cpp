@@ -10,6 +10,8 @@
 #include <camera.h>
 #include <data_buffer.h>
 
+using namespace aldx;
+
 static const D3D11_INPUT_ELEMENT_DESC posnormtex_layout[] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
