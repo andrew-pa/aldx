@@ -13,6 +13,7 @@ namespace aldx
 	struct float2 : public XMFLOAT2
 	{
 		float2(float x, float y) : XMFLOAT2(x, y) { }
+		float2(float xy) : XMFLOAT2(xy, xy) {}
 		float2() : XMFLOAT2(0, 0) { }
 		float2(const mvector& m)
 		{
@@ -33,6 +34,7 @@ namespace aldx
 	struct float3 : public XMFLOAT3
 	{
 		float3(float x, float y, float z) : XMFLOAT3(x, y, z) { }
+		float3(float xyz) : XMFLOAT3(xyz, xyz, xyz) {}
 		float3() : XMFLOAT3(0, 0, 0) { }
 		float3(const mvector& m)
 		{
@@ -40,6 +42,10 @@ namespace aldx
 		}
 
 		inline operator mvector()
+		{
+			return XMLoadFloat3(this);
+		}
+		inline operator mvector() const
 		{
 			return XMLoadFloat3(this);
 		}
@@ -54,6 +60,7 @@ namespace aldx
 	{
 		float4(float x, float y, float z, float w) : XMFLOAT4(x, y, z, w) { }
 		float4() : XMFLOAT4(0, 0, 0, 0) { }
+		float4(float xyzw) : XMFLOAT4(xyzw, xyzw, xyzw, xyzw){}
 		float4(const mvector& m)
 		{
 			XMStoreFloat4(this, m);
@@ -209,14 +216,14 @@ namespace aldx
 	//	return4(XMVectorNegate(va));
 	//}
 
-	inline XMVECTOR operator*(FXMVECTOR a, float b)
+	/*inline XMVECTOR operator*(FXMVECTOR a, float b)
 	{
 		return XMVectorScale(a, b);
 	}
 	inline XMVECTOR operator*(float b, FXMVECTOR a)
 	{
 		return XMVectorScale(a, b);
-	}
+	}*/
 
 
 	inline float dot(float3 a, float3 b)
