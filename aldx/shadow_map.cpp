@@ -20,7 +20,7 @@ namespace aldx
 			0.5f, 0.5f, 0.0f, 1.0f);
 		auto p = XMMatrixPerspectiveFovLH(lightfov, _size.x / _size.y, 0.1f, 1000.f);
 		XMVECTOR eye = XMLoadFloat4(&lightDirection);
-		eye = eye * radius;
+		eye = eye * float3(radius);
 		auto v = XMMatrixLookAtLH(eye, XMVectorSet(0, 0, 0, 1), XMVectorSet(0, 1, 0, 1));
 		XMStoreFloat4x4(&_shadowProj, p);
 		XMStoreFloat4x4(&_shadowView, v);

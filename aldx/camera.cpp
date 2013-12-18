@@ -139,7 +139,7 @@ namespace aldx
 			corrf = .15f * (_minDist - camdist) / camdist;
 		if (camdist > _maxDist)
 			corrf = .15f * (_maxDist - camdist) / camdist;
-		auto cpos = P - corrf*camToObj;
+		auto cpos = P - (float3(corrf)*camToObj);
 		look_at(cpos, TP, XMVectorSet(0, 1, 0, 0));
 		update_view();
 		/*_position.y = _targetHeight;
