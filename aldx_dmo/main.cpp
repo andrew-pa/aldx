@@ -98,7 +98,7 @@ class aldx_demo_app : public dx_app
 	render_texture* tex;
 	texture2d* img;
 public:
-	aldx_demo_app() : dx_app(8, true), 
+	aldx_demo_app() : dx_app(true), 
 		cam(float3(0, 3.f, 6), float3(0,0.1f,0), 0.1f, 1000, to_radians(45.f)) {}
 	void load() override
 	{

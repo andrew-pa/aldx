@@ -129,6 +129,18 @@ namespace aldx
 		uint32 length;
 	};
 
+	//datablob that leaks memory. only for weird stuff, like files
+	template<typename T>
+	struct _strange_datablob
+	{
+		_strange_datablob() : data(nullptr), length(-1) { }
+		_strange_datablob(T* d, uint32 l) : data(d), length(l) { }
+		_strange_datablob(uint32 l) : data(new T[l]), length(l) { }
+
+		T* data;
+		uint32 length;
+	};
+
 #ifndef _DX_READ_DATA
 #define _DX_READ_DATA
 	//Read in the data contained in filename, put it in to a datablob

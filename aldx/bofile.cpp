@@ -2,7 +2,7 @@
 
 namespace aldx
 {
-	bo_file* LoadBO(datablob<byte>* dbl)
+	bo_file* load_bo(datablob<byte>* dbl)
 	{
 		bo_header* he = (bo_header*)dbl->data;
 		bo_map* bmap = new bo_map();
@@ -23,7 +23,7 @@ namespace aldx
 	}
 
 #ifdef INCLUDE_WRITE_BO
-	void WriteBO(const bo_file& dta, FILE* f)
+	void write_bo(const bo_file& dta, FILE* f)
 	{
 		bo_header* boh = new bo_header();
 		boh->file_type = dta.type;
