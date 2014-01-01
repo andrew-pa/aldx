@@ -13,7 +13,7 @@ namespace aldx
 		bool draw_fps
 #endif
 		)
-		: windowSizeChanged(true), drawFPSCounter(draw_fps), vsync(true)
+		: windowSizeChanged(true), drawFPSCounter(draw_fps), vsync(true), clear_color(8.f, .5f, 0, 1)
 #ifdef MSAA
 		, msaa_level(MSAA_level)
 #endif

@@ -78,8 +78,7 @@ namespace aldx
 		}
 		inline void set_render_target() override
 		{
-			const float clearColor[] = { 0.8f, 0.5f, (float)rtexsk.size() / 5.f, 1.0f };
-			context->ClearRenderTargetView(current_render_target().render_targetv.Get(), clearColor);
+			context->ClearRenderTargetView(current_render_target().render_targetv.Get(), (float*)&clear_color);
 			context->ClearDepthStencilView(current_render_target().depth_stencil.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 			context->OMSetRenderTargets(1, current_render_target().render_targetv.GetAddressOf(), current_render_target().depth_stencil.Get());
 			context->RSSetViewports(1, &rtexsk.top().viewport);
@@ -122,6 +121,8 @@ namespace aldx
 		float fps, mspf;
 
 		bool vsync;
+
+		float4 clear_color;
 
 	private:
 		stack<render_target> rtexsk;

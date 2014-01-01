@@ -45,7 +45,7 @@ namespace aldx
 		uint type;
 	};
 
-	const int MAX_BO_OBJECTS = 1024;
+	const int MAX_BO_OBJECTS = 3;
 
 	//bo_header
 	// BO file header

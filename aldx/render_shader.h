@@ -34,16 +34,27 @@ namespace aldx
 	//};
 
 	//material
-	// Simple Direct Lighting material
+	// base struct for all materials
 	struct material
 	{
+		virtual size_t get_size() = 0;
+	};
+
+	//direct_light_material
+	// Simple Direct Lighting material
+	struct direct_light_material :  public material
+	{
 		float4 diffuse, specular, ambient;
-		material()
+		direct_light_material()
 			: diffuse(.7f, .7f, .7f, 1), specular(1, 1, 1, 0), ambient(.2f, .2f, .2f, 1)
 		{ }
-		material(float4 d, float4 s, float4 a)
+		direct_light_material(float4 d, float4 s, float4 a)
 			: diffuse(d), specular(s), ambient(a)
 		{
+		}
+		size_t get_size() override
+		{
+			return sizeof(direct_light_material);
 		}
 	};
 
@@ -60,7 +71,7 @@ namespace aldx
 		virtual void view(const float4x4& m) = 0;
 		virtual void proj(const float4x4& m) = 0;
 		virtual void set_texture(texture2d* tex) { }
-		virtual void set_material(const material& mat) { };
+		virtual void set_material(const material* mat) { };
 	};
 }
 

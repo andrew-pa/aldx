@@ -83,8 +83,9 @@ namespace aldx
 			meshes.push_back(new mesh(device, v, i, ic, vc, sizeof(dvertex), o->first));
 			worlds.push_back(id); //need to extract world from data also...
 		}
-
-		model::model(meshes, worlds);
+		
+		_meshes = meshes;
+		_worlds = worlds;
 	}
 
 	void ModelLoadDataFromBO(bo_file* b, vector<system_mesh>& sysmeshs)

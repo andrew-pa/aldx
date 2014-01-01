@@ -25,10 +25,12 @@ namespace aldx
 #ifdef INCLUDE_WRITE_BO
 	void write_bo(const bo_file& dta, FILE* f)
 	{
-		bo_header* boh = new bo_header();
+		size_t acsiz = sizeof(uint)* 2 + sizeof(bo_object)*dta.data->size(); //calulate actual size of the bo header vs. what the compiler thinks the size is
+		char* actual_header_data = new char[acsiz];
+		bo_header* boh = (bo_header*)actual_header_data;
 		boh->file_type = dta.type;
-		if (dta.data->size() > MAX_BO_OBJECTS)
-			throw exception("Number of objects in dta exceed the maximum number of objects in a BO file");
+		//if (dta.data->size() > MAX_BO_OBJECTS)
+		//	throw exception("Number of objects in dta exceed the maximum number of objects in a BO file");
 		boh->number_of_objects = dta.data->size();
 		int bo_objidx = 0;
 		const uint dt_size = dta.data->size() * sizeof(bo_object)+sizeof(uint32)* 2;

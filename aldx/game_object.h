@@ -14,11 +14,11 @@ namespace aldx
 	public:
 		struct game_object_material
 		{
-			material mat;
+			material* mat;
 			uint texture_index;
 			game_object_material()
 				: mat(), texture_index(0) { }
-			game_object_material(material m, uint t)
+			game_object_material(material* m, uint t)
 				: mat(m), texture_index(t) { }
 		};
 		game_object(void) : _model(nullptr), _world(), _shader(nullptr) { }
