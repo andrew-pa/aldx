@@ -25,7 +25,7 @@ namespace aldx
 		virtual void push(render_target_stack* rts);
 
 		propr(ComPtr<ID3D11DepthStencilView>, depth_stencil, { return dsv; })
-			propr(ComPtr<ID3D11RenderTargetView>, render_targetv, { return rtv; })
+		propr(ComPtr<ID3D11RenderTargetView>, render_targetv, { return rtv; })
 	};
 
 	//depth_render_texture

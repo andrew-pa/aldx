@@ -27,6 +27,7 @@ namespace aldx
 		float width, height;
 		rect() : width(0), height(0) {}
 		rect(float w, float h) : width(w), height(h) { }
+		float2 as_float2() { return float2(width, height); } //perhaps I should just use float2 as the rect struct 
 	};
 
 	typedef HWND window_type;
