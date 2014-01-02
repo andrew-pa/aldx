@@ -50,7 +50,8 @@ namespace aldx
 
 	depth_render_texture_cube::depth_render_texture_cube(ComPtr<ID3D11Device> device, uint cubemapsize)
 		: texture_cube(device, CD3D11_TEXTURE2D_DESC(DXGI_FORMAT_R24G8_TYPELESS, cubemapsize, cubemapsize, 6, 1, 
-		D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE)), _cmsize(cubemapsize)
+		D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE), 
+			CD3D11_SHADER_RESOURCE_VIEW_DESC(D3D11_SRV_DIMENSION_TEXTURECUBE, DXGI_FORMAT_R24_UNORM_X8_TYPELESS, 0, 1)), _cmsize(cubemapsize)
 	{
 		CD3D11_DEPTH_STENCIL_VIEW_DESC dsvd(D3D11_DSV_DIMENSION_TEXTURE2DARRAY,
 			DXGI_FORMAT_D24_UNORM_S8_UINT, 0, 1);
