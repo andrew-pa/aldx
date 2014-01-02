@@ -36,6 +36,7 @@ namespace aldx
 		float3(float x, float y, float z) : XMFLOAT3(x, y, z) { }
 		explicit float3(float xyz) : XMFLOAT3(xyz, xyz, xyz) {}
 		float3() : XMFLOAT3(0, 0, 0) { }
+		float3(float2 xy, float z) : XMFLOAT3(xy.x, xy.y, z) {}
 		float3(const mvector& m)
 		{
 			XMStoreFloat3(this, m);
@@ -60,6 +61,9 @@ namespace aldx
 	{
 		float4(float x, float y, float z, float w) : XMFLOAT4(x, y, z, w) { }
 		float4() : XMFLOAT4(0, 0, 0, 0) { }
+		float4(float2 xy, float z, float w) : XMFLOAT4(xy.x, xy.y, z, w) {}
+		float4(float2 xy, float2 zw) : XMFLOAT4(xy.x, xy.y, zw.x, zw.y) {}
+		float4(float3 xyz, float w) : XMFLOAT4(xyz.x, xyz.y, xyz.z, w) {}
 		explicit float4(float xyzw) : XMFLOAT4(xyzw, xyzw, xyzw, xyzw){}
 		float4(const mvector& m)
 		{
